@@ -86,7 +86,7 @@ HTML
 <html lang="fr">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
         <title>{$this->title}</title>
 {$this->head}
     </head>
