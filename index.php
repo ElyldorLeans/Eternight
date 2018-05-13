@@ -9,6 +9,8 @@ $webpage->appendContent(<<<HTML
         <p>A MODIFIER</p>
         <a href="./purpose.php">A propos</a>
         <a href="./rules.php">Règles</a>
+        <a href="./create.php">Créer un salon</a>
+        <a href="./join.php">Rejoindre un salon</a>
 HTML
     );
 
