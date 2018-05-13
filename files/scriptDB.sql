@@ -30,6 +30,7 @@ idServer INTEGER NOT NULL,
 idPlayer INTEGER NOT NULL,
 idRole INTEGER NOT NULL,
 roadSheet VARCHAR(256) NOT NULL,
+killed INTEGER(1) DEFAULT 0,
 PRIMARY KEY(idServer,idPlayer,idRole)
 )ENGINE=InnoDB;
 
