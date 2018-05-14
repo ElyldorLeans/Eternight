@@ -1,6 +1,6 @@
 <?php
 
-require_once(projectPath . "includes/myPDO.inc.php");
+require_once("myPDO.inc.php");
 
 /**
  * Fonction utilitaire qui réalise une requête SELECT

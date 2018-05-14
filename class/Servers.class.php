@@ -1,5 +1,8 @@
 <?php
 
+require_once(projectPath.'inc/autoload.inc.php');
+require_once (projectPath.'inc/requestUtils.inc.php');
+
 class Servers {
     private $idServer = null ;
     private $pwdServer = null ;
@@ -87,4 +90,16 @@ class Servers {
         $this->idOwner = $idOwner;
     }
 
+    public static function getServerByName($name)
+    {
+        $res = selectRequest(array("name" => $name), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers", "nameServer = :name");
+        if (isset($res[0]))
+            return $res[0];
+        else
+            throw new Exception("Aucun serveur trouvé");
+    }
+
+    public static function getServers(){
+        return selectRequest(array(),array(PDO::FETCH_CLASS => 'Servers'), "*","Servers","1");
+    }
 }
