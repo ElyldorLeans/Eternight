@@ -18,7 +18,7 @@ if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
       //On test que le serveur existe
       $server = Servers::getServerByName($_POST['serverName']);
       if($_POST['serverMode'] == "join"){
-
+          insertRequest(array("idServer" => $server->getIdServer()),"Players(idPlayer,idServer,idRole,roadSheet)","(1,:idServer,1,'lol')");
       }
       else {
           $exist = true;
@@ -56,7 +56,7 @@ if(!$correctName){echo("Le serveur n'existe pas");}
 foreach($servers as $s){
     //$proprio = Users::getUserById($s->getIdOwner());
     //$webpage->appendContent("<p>{$s->getNameServer()} de {$proprio->getLogin()}</p>");
-    $webpage->appendContent("<p>{$s->getNameServer()}</p>");
+    $webpage->appendContent("<form action='create.php' method='post'><input type='text' name='serverName' value='{$s->getNameServer()}' hidden> {$s->getNameServer()} <button name='serverMode' type='submit' value='join'>Rejoindre</button></form>");
 }
 
 echo($webpage->toHTML());
