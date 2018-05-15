@@ -10,6 +10,10 @@ class Servers {
     private $descServer = null ;
     private $idOwner = null ;
 
+    public static function createServer($idOwner,$nameServer){
+        insertRequest(array("idOwner" => $idOwner, "nameServer" => $nameServer),"Servers(idOwner,nameServer)","(:idOwner, :nameServer)");
+    }
+
     /**
      * @return null
      */
@@ -93,6 +97,16 @@ class Servers {
     public static function getServerByName($name)
     {
         $res = selectRequest(array("name" => $name), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers", "nameServer = :name");
+        if (isset($res[0]))
+            return $res[0];
+     else
+         throw new Exception("Aucun serveur trouvé");
+    }
+
+
+    public static function getServerByIdOwner($idOwner)
+    {
+        $res = selectRequest(array("idOwner" => $idOwner), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers", "nameServer = :idOwner");
         if (isset($res[0]))
             return $res[0];
         else
