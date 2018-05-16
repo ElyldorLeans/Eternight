@@ -5,7 +5,10 @@ require_once('./inc/autoload.inc.php');
 $webpage = new Webpage("Eternight - Accueil");
 
 $webpage->appendContent(<<<HTML
-        <h1>TEST</h1>
+    <div class="jumbotron text-center">
+        <h1>Eternight</h1>
+         <p>Parce qu'on avait pas de meilleur nom</p>
+    </div>
 HTML
 );
 
@@ -43,7 +46,7 @@ $webpage->appendContent(<<<HTML
                <input type="radio" name="serverMode" id="join" value="join" required>
                <label for="create">Rejoindre un serveur</label>
                <input type="text" name="serverName" required>  
-               <button type="submit">X</button>                
+               <button type="submit" class="btn">X</button>                
             </form>
 HTML
 );
@@ -56,7 +59,9 @@ if(!$correctName){echo("Le serveur n'existe pas");}
 foreach($servers as $s){
     //$proprio = Users::getUserById($s->getIdOwner());
     //$webpage->appendContent("<p>{$s->getNameServer()} de {$proprio->getLogin()}</p>");
-    $webpage->appendContent("<form action='create.php' method='post'><input type='text' name='serverName' value='{$s->getNameServer()}' hidden> {$s->getNameServer()} <button name='serverMode' type='submit' value='join'>Rejoindre</button></form>");
+    $webpage->appendContent("<form action='create.php' method='post'><input type='text' name='serverName' value='{$s->getNameServer()}' hidden> {$s->getNameServer()} <button name='serverMode' type='submit' value='join' class='btn'>Rejoindre</button></form>");
 }
+
+$webpage->appendContent("        <a href=\"./index.php\">Accueil</a>");
 
 echo($webpage->toHTML());
