@@ -17,8 +17,8 @@ HTML
 
 $webpage->appendContent(<<<HTML
         <form name="inscription" action="inscription.php" method="get">
-            Login <input type="text" name="login" required></input>
-            Password <input type="password" name="pwd" required></input>
+            Login <input type="text" id="login" name="login" required></input>
+            Password <input type="password" id="pwd" name="pwd" required></input>
             <button onclick="crypt()">Inscription</button>
             </form>
 HTML
