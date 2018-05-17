@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c51c2528-f5ff-42d7-b948-93c09d094f22" name="Default" comment="" />
+    <list default="true" id="c51c2528-f5ff-42d7-b948-93c09d094f22" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/ignore.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/ignore.gitignore" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,31 +15,12 @@
     <favorites_list name="Eternight" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="test.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/html/test.html">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="ignore.gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ignore.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bootstrap.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bootstrap/css/bootstrap.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="630" column="21" selection-start-line="630" selection-start-column="21" selection-end-line="630" selection-end-column="21" />
-              <folding>
-                <element signature="e#81150#81369#2" expanded="true" />
-                <element signature="e#81599#81767#2" expanded="true" />
-                <element signature="e#82330#82495#2" expanded="true" />
-                <element signature="e#82854#83020#1" expanded="true" />
-                <element signature="e#97725#97968#2" expanded="true" />
-                <element signature="e#98980#99229#2" expanded="true" />
-                <element signature="e#132932#133122#2" expanded="true" />
-                <element signature="e#133177#133367#2" expanded="true" />
-              </folding>
+            <state>
+              <caret column="8" selection-start-column="8" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -68,6 +51,7 @@
         <option value="$PROJECT_DIR$/bootstrap/css/bootstrap.css" />
         <option value="$PROJECT_DIR$/bootstrap/js/jQuery.js" />
         <option value="$PROJECT_DIR$/html/test.html" />
+        <option value="$PROJECT_DIR$/ignore.gitignore" />
       </list>
     </option>
   </component>
@@ -96,29 +80,7 @@
           <expand>
             <path>
               <item name="Eternight" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eternight" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="Eternight" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eternight" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="bootstrap" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="Eternight" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eternight" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="bootstrap" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="css" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="Eternight" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eternight" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="bootstrap" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="js" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="Eternight" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Eternight" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="html" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Eternight" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -160,17 +122,26 @@
       <option name="presentableId" value="Default" />
       <updated>1526556619223</updated>
       <workItem from="1526556622604" duration="6711000" />
+      <workItem from="1526596942551" duration="82000" />
     </task>
+    <task id="LOCAL-00001" summary="test gitignore">
+      <created>1526596987940</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1526596987940</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6711000" />
+    <option name="totallyTimeSpent" value="6793000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="633" y="0" width="653" height="727" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.49837133" visible="true" weight="0.17683882" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.49734324" visible="true" weight="0.088541664" />
       <window_info anchor="bottom" id="TODO" order="11" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
@@ -180,15 +151,15 @@
       <window_info anchor="bottom" id="Run" order="7" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="2" />
-      <window_info active="true" id="Favorites" order="0" sideWeight="0.50162864" side_tool="true" visible="true" weight="0.17683882" />
+      <window_info id="Favorites" order="0" sideWeight="0.50265676" side_tool="true" visible="true" weight="0.088541664" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.4" />
-      <window_info anchor="bottom" id="Find" order="6" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
-      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="5" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="6" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,10 +168,21 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="test gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="test gitignore" />
+  </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/html/test.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bootstrap/css/bootstrap.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
+        <state relative-caret-position="10710">
           <caret line="630" column="21" selection-start-line="630" selection-start-column="21" selection-end-line="630" selection-end-column="21" />
           <folding>
             <element signature="e#81150#81369#2" expanded="true" />
@@ -226,16 +208,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/html/test.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="434">
           <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bootstrap/css/bootstrap.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="630" column="21" selection-start-line="630" selection-start-column="21" selection-end-line="630" selection-end-column="21" />
+          <folding>
+            <element signature="e#81150#81369#2" expanded="true" />
+            <element signature="e#81599#81767#2" expanded="true" />
+            <element signature="e#82330#82495#2" expanded="true" />
+            <element signature="e#82854#83020#1" expanded="true" />
+            <element signature="e#97725#97968#2" expanded="true" />
+            <element signature="e#98980#99229#2" expanded="true" />
+            <element signature="e#132932#133122#2" expanded="true" />
+            <element signature="e#133177#133367#2" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ignore.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="8" selection-start-column="8" selection-end-column="8" />
         </state>
       </provider>
     </entry>
