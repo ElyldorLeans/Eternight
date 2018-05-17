@@ -12,19 +12,17 @@ $webpage->appendContent(<<<HTML
 HTML
 );
 
-
-$exist = false;
-$correctName = true;
 //On vérifie qu'on à reçu des données
 if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
   try{
       //On test que le serveur existe
       $server = Servers::getServerByName($_POST['serverName']);
       if($_POST['serverMode'] == "join"){
-          insertRequest(array("idServer" => $server->getIdServer()),"Players(idPlayer,idServer,idRole,roadSheet)","(1,:idServer,1,'lol')");
+          Players::addPlayer($server->getIdServer(),1);
+          echo("Vous êtes maintenant dans le serveur");
       }
       else {
-          $exist = true;
+          echo("Le serveur existe déjà");
       }
   } catch (Exception $e){
         if($_POST['serverMode'] == "create"){
@@ -32,7 +30,7 @@ if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
             Servers::createServer(1,$_POST['serverName']);
         }
         else {
-            $correctName = false;
+            echo ($e->getMessage());
         }
     }
 }
@@ -50,11 +48,6 @@ $webpage->appendContent(<<<HTML
             </form>
 HTML
 );
-
-//Créer l'alerte que le serveur existe déjà (eavec une div)
-if($exist){echo("Le serveur existe déjà");}
-//Créer l'alerte que le nom du serveur n'existe pas (avec une div)
-if(!$correctName){echo("Le serveur n'existe pas");}
 
 foreach($servers as $s){
     //$proprio = Users::getUserById($s->getIdOwner());

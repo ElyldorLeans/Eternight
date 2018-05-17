@@ -7,10 +7,10 @@ PRIMARY KEY(idUser)
 
 CREATE TABLE Servers(
 idServer INTEGER NOT NULL AUTO_INCREMENT,
-pwdServer VARCHAR(25) NOT NULL,
 nameServer VARCHAR(25) NOT NULL,
-descServer TEXT NOT NULL,
+descServer TEXT,
 idOwner INTEGER NOT NULL,
+unjoinable BOOL DEFAULT 0,
 PRIMARY KEY(idServer)
 )ENGINE=InnoDB;
 
@@ -29,9 +29,11 @@ ALTER TABLE Servers
 CREATE TABLE Players(
 idServer INTEGER NOT NULL,
 idPlayer INTEGER NOT NULL,
-idRole INTEGER NOT NULL,
-roadSheet VARCHAR(256) NOT NULL,
-PRIMARY KEY(idServer,idPlayer,idRole)
+idRole INTEGER,
+phase INTEGER DEFAULT 0,
+numPlayer INTEGER,
+roadSheet VARCHAR(256),
+PRIMARY KEY(idServer,idPlayer)
 )ENGINE=InnoDB;
 
 ALTER TABLE Players
