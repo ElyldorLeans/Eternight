@@ -132,7 +132,14 @@ class Players
      * TODO
      */
     static public function action() {
-        // Bite
+        // Un gros gros switch case
+    }
+
+    /**
+     * The "Lycanthrope"'s action.
+     */
+    static public function actionLycanthrope() {
+        // Voter pour une victime => résolution à la fin de qui miam miam
     }
 
     /**
@@ -140,20 +147,20 @@ class Players
      * @param bool $lycanthrope
      */
     static public function actionPsychic($lycanthrope = false) {
-        // Bite
+        // Voir le rôle de quelqu'un, ou 3 rôle si lycanthrope
     }
 
     /**
      * The "Statisticien"'s action.
      */
     static public function actionStatistician() {
-        // Bite
+        // Avoir BEAUCOUP TRPO D'INFOS
     }
 
     /**
-     * The "Loup Garou"'s action.
+     * The "Loup Blanc"'s action.
      */
-    static public function actionWerewolf() {
-        // Bite
+    static public function actionWhiteWerewolf() {
+        // Manger du loup ?
     }
 }
