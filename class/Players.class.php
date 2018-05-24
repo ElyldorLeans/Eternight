@@ -5,17 +5,27 @@ require_once (projectPath.'inc/requestUtils.inc.php');
 
 class Players
 {
-    private $idUser = null;
+    private $idPlayer = null;
     private $idServer = null;
-    private $idRole = null;
+    private $role = null;
     private $phase = null;
     private $numPlayer = null;
     private $roadSheet = null;
 
 
-    public static function addPlayer($idServer,$idUser){
+    public static function createPlayersByServer($idServer){
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'),"idPlayer","Players","idServer = :idServer");
+        if(isset($res)){
+            return $res;
+        } else {
+            throw new Exception("Serveur inexistant");
+        }
+    }
+
+
+    public static function addPlayer($idServer,$idPlayer){
         try{
-            insertRequest(array("idServer" => $idServer,"idPlayer" => $idUser),"Players(idPlayer,idServer)","(:idPlayer,:idServer)");
+            insertRequest(array("idServer" => $idServer,"idPlayer" => $idPlayer),"Players(idPlayer,idServer)","(:idPlayer,:idServer)");
 
         } catch(Exception $e) {
             throw new Exception("Vous êtes déjà dans ce serveur");
@@ -25,49 +35,49 @@ class Players
     /**
      * @return null
      */
-    public function getIdUser()
+    public function getIdPlayer()
     {
-        return $this->idUser;
+        return $this->idPlayer;
     }
 
     /**
-     * @param null $idUser
+     * @param null $idPlayer
      */
-    public function setIdUser($idUser)
+    public function setIdPlayer($idPlayer)
     {
-        $this->idUser = $idUser;
+        $this->idPlayer = $idPlayer;
     }
 
     /**
      * @return null
      */
-    public function getIdSrver()
+    public function getIdServer()
     {
-        return $this->idSrver;
+        return $this->idServer;
     }
 
     /**
      * @param null $idSrver
      */
-    public function setIdSrver($idSrver)
+    public function setIdServer($idServer)
     {
-        $this->idSrver = $idSrver;
+        $this->idServer = $idServer;
     }
 
     /**
      * @return null
      */
-    public function getIdRole()
+    public function getRole()
     {
-        return $this->idRole;
+        return $this->role;
     }
 
     /**
      * @param null $idRole
      */
-    public function setIdRole($idRole)
+    public function setIdRole($role)
     {
-        $this->idRole = $idRole;
+        $this->role = $role;
     }
 
     /**

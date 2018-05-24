@@ -48,6 +48,29 @@ SQL
         throw new Exception("Une erreur s'est produite pendant la requête");
 }
 
+function selectAllRequest($fetch, $select, $from, $extraOptions = "") {
+    $pdo = MyPDO::getInstance();
+    $stmt = $pdo->prepare(<<<SQL
+			SELECT $select
+			FROM $from
+			$extraOptions ;
+SQL
+    );
+
+    // On détermine le mode de Fetch
+    if(array_key_exists(PDO::FETCH_CLASS, $fetch))
+        $stmt->setFetchMode(PDO::FETCH_CLASS, $fetch[PDO::FETCH_CLASS]);
+    else
+        $stmt->setFetchMode(array_keys($fetch)[0]);
+
+    $stmt->execute();
+
+    if(($res = $stmt->fetchAll()) !== false)
+        return $res;
+    else
+        throw new Exception("Une erreur s'est produite pendant la requête");
+}
+
 /**
  * Fonction utilitaire qui réalise une requête DELETE
  *
