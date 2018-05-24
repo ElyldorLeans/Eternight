@@ -128,5 +128,32 @@ class Players
         $this->roadSheet = $roadSheet;
     }
 
+    /**
+     * TODO
+     */
+    static public function action() {
+        // Bite
+    }
 
+    /**
+     * The "Voyante"'s action.
+     * @param bool $lycanthrope
+     */
+    static public function actionPsychic($lycanthrope = false) {
+        // Bite
+    }
+
+    /**
+     * The "Statisticien"'s action.
+     */
+    static public function actionStatistician() {
+        // Bite
+    }
+
+    /**
+     * The "Loup Garou"'s action.
+     */
+    static public function actionWerewolf() {
+        // Bite
+    }
 }
