@@ -1,5 +1,8 @@
+
 function crypt() {
-    pwd = document.getElementsById("pwd");
-    login = document.getElementsById("login");
-    alert(login);
+    pwd = document.getElementsById("pwd").value;
+    login = document.getElementsById("login").value;
+    jQuery(document).ready(function(){
+        alert(test);
+    });
 }

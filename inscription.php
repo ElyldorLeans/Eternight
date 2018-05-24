@@ -3,7 +3,7 @@
 require_once('inc/autoload.inc.php');
 
 $webpage = new Webpage("Eternight - Accueil");
-$webpage->appendJsUrl(projectPath."js/inscription.js");
+$webpage->appendJsUrl("js/inscription.js");
 $webpage->appendContent(<<<HTML
 <div class="jumbotron text-center">
     <h1>Eternight</h1>
