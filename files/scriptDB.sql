@@ -22,7 +22,7 @@ ALTER TABLE Servers
 CREATE TABLE Players(
 idServer INTEGER NOT NULL,
 idPlayer INTEGER NOT NULL,
-role INTEGER,
+role ENUM('En attente', 'Voyante', 'Lupus Garus', 'Villageois' ) NOT NULL,
 phase INTEGER DEFAULT 0,
 numPlayer INTEGER,
 roadSheet VARCHAR(256),
