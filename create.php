@@ -2,6 +2,12 @@
 
 require_once('./inc/autoload.inc.php');
 
+// Si l'utilisateur n'est pas connecté, on le renvoie vers la page de connexion
+if(!Users::isConnected()){
+    header('Location: connexion.php?e=1');
+    exit();
+}
+
 $webpage = new Webpage("Eternight - Accueil");
 
 $webpage->appendContent(<<<HTML

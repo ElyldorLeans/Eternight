@@ -13,6 +13,7 @@ $webpage->appendContent(<<<HTML
         <a href="./rules.php">Règles</a>
         <a href="./create.php">Créer un salon</a>
         <a href="./inscription.php">Inscription</a>
+        <a href="./connexion.php">Connexion</a>
 HTML
     );
 

@@ -17,7 +17,55 @@ class Users
         } else {
             throw new Exception("Aucun utilisateur trouvé");
         }
-}
+    }
+
+    /**
+     * Démarre la session
+     *
+     * @throws Exception Si la session n'a pas pu être démarrée
+     */
+    private static function startSession() {
+        if(session_status() == PHP_SESSION_NONE) {
+            if(!headers_sent())
+                session_start();
+            else
+                throw new Exception("Erreur de session");
+        }
+    }
+
+    public static function isConnected() {
+        self::startSession();
+        if(isset($_SESSION['User']) && !empty($_SESSION['User']) && $_SESSION['User'] != null){
+            return true;
+        }
+        else return false;
+    }
+    /**
+     * Stock l'instance courante dans une variable de session
+     */
+    public function saveIntoSession() {
+        self::startSession();
+        $_SESSION['User'] = $this;
+    }
+    /**
+     * Déconnecte le membre
+     */
+    public static function disconnect() {
+        self::startSession();
+        $_SESSION['User'] = null;
+    }
+
+    /**
+     * Retourne l'instance du membre sauvegardée dans un variable de session
+     * @return Member|null L'instance du membre
+     */
+    public static function getInstance() {
+        self::startSession();
+        if(self::isConnected())
+            return $_SESSION['User'];
+        else
+            return null;
+    }
 
     /**
      * @return null
