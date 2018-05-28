@@ -3,7 +3,7 @@
 require_once('inc/autoload.inc.php');
 
 $webpage = new Webpage("Eternight - Accueil");
-$webpage->appendJsUrl(projectPath."js/inscription.js");
+$webpage->appendJsUrl("js/inscription.js");
 $webpage->appendContent(<<<HTML
 <div class="jumbotron text-center">
     <h1>Eternight</h1>
@@ -18,8 +18,8 @@ HTML
 
 $webpage->appendContent(<<<HTML
         <form name="inscription" action="inscription.php" method="get">
-            Login <input type="text" name="login" required></input>
-            Password <input type="password" name="pwd" required></input>
+            Login <input type="text" id="login" name="login" required></input>
+            Password <input type="password" id="pwd" name="pwd" required></input>
             <button onclick="crypt()">Inscription</button>
             </form>
 HTML
