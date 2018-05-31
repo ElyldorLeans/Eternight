@@ -1,17 +1,17 @@
 CREATE TABLE Users(
-idUser INTEGER NOT NULL AUTO_INCREMENT,
-login VARCHAR(25) NOT NULL,
-pwdUser VARCHAR(128) NOT NULL,
-PRIMARY KEY(idUser)
+  idUser INTEGER NOT NULL AUTO_INCREMENT,
+  login VARCHAR(25) NOT NULL,
+  pwdUser VARCHAR(128) NOT NULL,
+  PRIMARY KEY(idUser)
 )ENGINE=InnoDB;
 
 CREATE TABLE Servers(
-idServer INTEGER NOT NULL AUTO_INCREMENT,
-nameServer VARCHAR(25) NOT NULL,
-descServer TEXT,
-idOwner INTEGER NOT NULL,
-unjoinable BOOL DEFAULT 0,
-PRIMARY KEY(idServer)
+  idServer INTEGER NOT NULL AUTO_INCREMENT,
+  nameServer VARCHAR(25) NOT NULL,
+  descServer TEXT,
+  idOwner INTEGER NOT NULL,
+  unjoinable BOOL DEFAULT 0,
+  PRIMARY KEY(idServer)
 )ENGINE=InnoDB;
 
 ALTER TABLE Servers
@@ -20,20 +20,20 @@ ALTER TABLE Servers
   ON DELETE CASCADE;
 
 CREATE TABLE Players(
-idServer INTEGER NOT NULL,
-idPlayer INTEGER NOT NULL,
-role ENUM('En attente', 'Voyante', 'Lupus Garous', 'Villageois' ) NOT NULL DEFAULT 'En attente',
-phase INTEGER DEFAULT 0,
-numPlayer INTEGER,
-roadSheet VARCHAR(256),
-PRIMARY KEY(idServer,idPlayer)
+  idServer INTEGER NOT NULL,
+  idPlayer INTEGER NOT NULL,
+  role ENUM('En attente', 'Voyante', 'Lupus Garous', 'Villageois' ) NOT NULL DEFAULT 'En attente',
+  phase INTEGER DEFAULT 0,
+  numPlayer INTEGER,
+  roadSheet VARCHAR(256),
+  PRIMARY KEY(idServer,idPlayer)
 )ENGINE=InnoDB;
 
 CREATE TABLE Targets(
-idServer INTEGER NOT NULL,
-idTargeted INTEGER NOT NULL,
-idTargeter INTEGER NOT NULL,
-PRIMARY KEY (idServer,idTargeter,idTargeted)
+  idServer INTEGER NOT NULL,
+  idTargeted INTEGER NOT NULL,
+  idTargeter INTEGER NOT NULL,
+  PRIMARY KEY (idServer,idTargeter,idTargeted)
 )ENGINE=InnoDB;
 
 ALTER TABLE Players
