@@ -16,7 +16,7 @@ $webpage->appendContent(<<<HTML
 HTML
 );
 
-if(!Users::isConnected()) {
+if(Users::isConnected()) {
     $server = Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
     $players = Players::createPlayersByServer($server->getIdServer());
     foreach ($players as $p) {
