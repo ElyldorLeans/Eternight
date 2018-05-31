@@ -22,7 +22,7 @@ ALTER TABLE Servers
 CREATE TABLE Players(
 idServer INTEGER NOT NULL,
 idPlayer INTEGER NOT NULL,
-role ENUM('En attente', 'Voyante', 'Lupus Garus', 'Villageois' ) NOT NULL,
+role ENUM('En attente', 'Voyante', 'Lupus Garous', 'Villageois' ) NOT NULL DEFAULT 'En attente',
 phase INTEGER DEFAULT 0,
 numPlayer INTEGER,
 roadSheet VARCHAR(256),
@@ -32,7 +32,7 @@ PRIMARY KEY(idServer,idPlayer)
 CREATE TABLE Targets(
 idServer INTEGER NOT NULL,
 idTargeted INTEGER NOT NULL,
-idTargeter INTEGER NOT NULL
+idTargeter INTEGER NOT NULL,
 PRIMARY KEY (idServer,idTargeter,idTargeted)
 )ENGINE=InnoDB;
 
@@ -44,11 +44,6 @@ ALTER TABLE Players
 ALTER TABLE Players
   ADD CONSTRAINT FOREIGN KEY (idPlayer)
   REFERENCES Users(idUser)
-  ON DELETE CASCADE;
-
-ALTER TABLE Players
-  ADD CONSTRAINT FOREIGN KEY (idRole)
-  REFERENCES Role(idRole)
   ON DELETE CASCADE;
 
   ALTER TABLE Targets

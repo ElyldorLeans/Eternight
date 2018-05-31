@@ -12,6 +12,10 @@ $webpage->appendContent(<<<HTML
 HTML
 );
 
+if(!Users::isConnected()){
+    header('Location: connexion.php?a=1'.SID);
+}
+
 //On vérifie qu'on à reçu des données
 if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
   try{

@@ -15,12 +15,16 @@ $webpage->appendContent(<<<HTML
         <a href="./manageServer.php">Gestion du serveur</a>
 HTML
 );
-$server = Servers::getServerByIdOwner(1);
-$players = Players::createPlayersByServer($server->getIdServer());
 
-
-foreach($players as $p){
-    $webpage->appendContent($p->getIdPlayer());
+if(Users::isConnected()) {
+    $server = Servers::getServerByIdOwner();
+    $players = Players::createPlayersByServer($server->getIdServer());
+    foreach ($players as $p) {
+        $webpage->appendContent($p->getIdPlayer());
+    }
+}
+else {
+    header('Location: connexion.php?a=1'.SID);
 }
 
 echo($webpage->toHTML());
