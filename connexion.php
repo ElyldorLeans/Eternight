@@ -25,18 +25,24 @@ HTML
 }
 
 if(isset($_POST['login']) && !empty($_POST['login']) && isset($_POST['pwd']) && !empty($_POST['pwd'])){
-    $bite = Users::getUserConnect($_POST['login'],$_POST['pwd']);
-    $bite->SaveIntoSession();
-    header('Location: index.php'.SID);
-
+    try{
+        $user = Users::getUserConnect($_POST['login'],$_POST['pwd']);
+        $user->SaveIntoSession();
+        header('Location: index.php'.SID);
+    } catch(Exception $e){
+        $webpage->appendContent(<<<HTML
+        <script>alert("Utilisateur inconnu")</script>
+HTML
+        );
+    }
 }
 
 $webpage->appendContent(<<<HTML
-        <form name="inscription" action="connexion.php" method="post">
+        <form name="inscription" method="post">
             Login <input type="text" id="login" name="login" required></input>
             Password <input type="password" id="pwd" name="pwd" required></input>
             <button onclick="crypt()">Inscription</button>
-            <button onclick="connexion()">Connexion</button>
+            <button onclick="connexion.php">Connexion</button>
             </form>
 HTML
 );
