@@ -7,7 +7,7 @@ $webpage = new Webpage("Eternight - Connexion");
 $webpage->appendContent(<<<HTML
     <div class="jumbotron text-center">
         <h1>Eternight</h1>
-         <p>Parce qu'on avait pas de meilleur nom</p>
+         <p>Parce qu'on n'avait pas de meilleur nom</p>
     </div>
         <a href="./purpose.php">A propos</a>
         <a href="./rules.php">Règles</a>
