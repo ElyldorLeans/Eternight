@@ -19,12 +19,15 @@ HTML
 if(Users::isConnected()) {
     $server = Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
     $players = Players::createPlayersByServer($server->getIdServer());
+    $tableHL = "<table><tr><td>Joueurs Hors Ligne</td></tr>";
+    $tableIL = "<table><tr><td>Joueurs En Ligne</td></tr>";
     foreach ($players as $p) {
-        $webpage->appendContent(<<<HTML
-        {$p->getIdPlayer()} <input type="checkbox">
-HTML
-);
+        $c = Users::getUserById($p->getIdPlayer());
+        if($c->getIsManual())$tableHL = $tableHL."<tr><td>{$p->getIdPlayer()} - {$p->getRole()}</td></tr>";
+        else $tableIL = $tableIL."<tr><td>{$p->getIdPlayer()} - {$p->getRole()}</td></tr>";
     }
+    $webpage->appendContent($tableHL."</table>");
+    $webpage->appendContent($tableIL."</table>");
 }
 else {
     header('Location: connexion.php?a=1'.SID);

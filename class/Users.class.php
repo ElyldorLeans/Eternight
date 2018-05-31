@@ -9,6 +9,23 @@ class Users
     private $login = null;
     private $pwdUser = null;
     private $email = null;
+    private $isManual = null;
+
+    /**
+     * @return null
+     */
+    public function getisManual()
+    {
+        return $this->isManual;
+    }
+
+    /**
+     * @param null $isManual
+     */
+    public function setIsManual($isManual)
+    {
+        $this->isManual = $isManual;
+    }
 
     public static function getUserById($id){
         $res = selectRequest(array("id" => $id),array(PDO::FETCH_CLASS => 'Users'), "*","Users","idUser = :id");

@@ -14,7 +14,7 @@ class Players
 
 
     public static function createPlayersByServer($idServer){
-        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'),"idPlayer","Players","idServer = :idServer");
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'),"*","Players","idServer = :idServer");
         if(isset($res)){
             return $res;
         } else {
