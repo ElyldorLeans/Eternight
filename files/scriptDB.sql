@@ -2,6 +2,7 @@ CREATE TABLE Users(
   idUser INTEGER NOT NULL AUTO_INCREMENT,
   login VARCHAR(25) NOT NULL,
   pwdUser VARCHAR(128) NOT NULL,
+  isManual BOOL DEFAULT 0,
   PRIMARY KEY(idUser)
 )ENGINE=InnoDB;
 
@@ -22,19 +23,27 @@ ALTER TABLE Servers
 CREATE TABLE Players(
   idServer INTEGER NOT NULL,
   idPlayer INTEGER NOT NULL,
-  role ENUM('En attente', 'Voyante', 'Lupus Garous', 'Villageois' ) NOT NULL DEFAULT 'En attente',
+  role ENUM('En attente', 'Loup Garou', 'Loup Blanc', 'Voyante', 'Statistiscien', 'Voyante Corrompue', 'Sorcière Corrompue') NOT NULL DEFAULT 'En attente',
   phase INTEGER DEFAULT 0,
   numPlayer INTEGER,
   roadSheet VARCHAR(256),
+  isDead BOOL DEFAULT 0,
   PRIMARY KEY(idServer,idPlayer)
 )ENGINE=InnoDB;
 
-CREATE TABLE Targets(
+CREATE TABLE WerewolfTargets(
   idServer INTEGER NOT NULL,
   idTargeted INTEGER NOT NULL,
   idTargeter INTEGER NOT NULL,
   PRIMARY KEY (idServer,idTargeter,idTargeted)
-)ENGINE=InnoDB;
+) ENGINE=InnoDB;
+
+CREATE TABLE VillageTargets(
+  idServer INTEGER NOT NULL,
+  idTargeted INTEGER NOT NULL,
+  idTargeter INTEGER NOT NULL,
+  PRIMARY KEY (idServer,idTargeter,idTargeted)
+) ENGINE=InnoDB;
 
 ALTER TABLE Players
   ADD CONSTRAINT FOREIGN KEY (idServer)
@@ -46,17 +55,32 @@ ALTER TABLE Players
   REFERENCES Users(idUser)
   ON DELETE CASCADE;
 
-  ALTER TABLE Targets
+ALTER TABLE WerewolfTargets
   ADD CONSTRAINT FOREIGN KEY (idServer)
   REFERENCES Servers(idServer)
   ON DELETE CASCADE;
 
-ALTER TABLE Targets
+ALTER TABLE WerewolfTargets
   ADD CONSTRAINT FOREIGN KEY (idTargeted)
   REFERENCES Users(idUser)
   ON DELETE CASCADE;
 
-ALTER TABLE Targets
+ALTER TABLE WerewolfTargets
+  ADD CONSTRAINT FOREIGN KEY (idTargeter)
+  REFERENCES Users(idUser)
+  ON DELETE CASCADE;
+
+ALTER TABLE VillageTargets
+  ADD CONSTRAINT FOREIGN KEY (idServer)
+  REFERENCES Servers(idServer)
+  ON DELETE CASCADE;
+
+ALTER TABLE VillageTargets
+  ADD CONSTRAINT FOREIGN KEY (idTargeted)
+  REFERENCES Users(idUser)
+  ON DELETE CASCADE;
+
+ALTER TABLE VillageTargets
   ADD CONSTRAINT FOREIGN KEY (idTargeter)
   REFERENCES Users(idUser)
   ON DELETE CASCADE;
