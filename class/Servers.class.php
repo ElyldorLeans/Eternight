@@ -106,7 +106,7 @@ class Servers {
 
     public static function getServerByIdOwner($idOwner)
     {
-        $res = selectRequest(array("idOwner" => $idOwner), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers", "nameServer = :idOwner");
+        $res = selectRequest(array("idOwner" => $idOwner), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers", "idOwner = :idOwner");
         if (isset($res[0]))
             return $res[0];
         else

@@ -14,13 +14,6 @@ unjoinable BOOL DEFAULT 0,
 PRIMARY KEY(idServer)
 )ENGINE=InnoDB;
 
-CREATE TABLE Role(
-idRole INTEGER NOT NULL AUTO_INCREMENT,
-nameRole VARCHAR(25) NOT NULL,
-imgRole VARCHAR(25) NOT NULL,
-PRIMARY KEY(idRole)
-)ENGINE=InnoDB;
-
 ALTER TABLE Servers
   ADD CONSTRAINT FOREIGN KEY (idOwner)
   REFERENCES Users(idUser)
@@ -29,11 +22,18 @@ ALTER TABLE Servers
 CREATE TABLE Players(
 idServer INTEGER NOT NULL,
 idPlayer INTEGER NOT NULL,
-idRole INTEGER,
+role ENUM('En attente', 'Voyante', 'Lupus Garous', 'Villageois' ) NOT NULL DEFAULT 'En attente',
 phase INTEGER DEFAULT 0,
 numPlayer INTEGER,
 roadSheet VARCHAR(256),
 PRIMARY KEY(idServer,idPlayer)
+)ENGINE=InnoDB;
+
+CREATE TABLE Targets(
+idServer INTEGER NOT NULL,
+idTargeted INTEGER NOT NULL,
+idTargeter INTEGER NOT NULL,
+PRIMARY KEY (idServer,idTargeter,idTargeted)
 )ENGINE=InnoDB;
 
 ALTER TABLE Players
@@ -46,8 +46,18 @@ ALTER TABLE Players
   REFERENCES Users(idUser)
   ON DELETE CASCADE;
 
-ALTER TABLE Players
-  ADD CONSTRAINT FOREIGN KEY (idRole)
-  REFERENCES Role(idRole)
+  ALTER TABLE Targets
+  ADD CONSTRAINT FOREIGN KEY (idServer)
+  REFERENCES Servers(idServer)
+  ON DELETE CASCADE;
+
+ALTER TABLE Targets
+  ADD CONSTRAINT FOREIGN KEY (idTargeted)
+  REFERENCES Users(idUser)
+  ON DELETE CASCADE;
+
+ALTER TABLE Targets
+  ADD CONSTRAINT FOREIGN KEY (idTargeter)
+  REFERENCES Users(idUser)
   ON DELETE CASCADE;
 

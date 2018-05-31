@@ -87,6 +87,7 @@ HTML
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+            <script type='text/javascript' src="js/jQuery.js"></script>
         <title>{$this->title}</title>
 {$this->head}
     </head>
