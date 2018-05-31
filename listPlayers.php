@@ -16,11 +16,14 @@ $webpage->appendContent(<<<HTML
 HTML
 );
 
-if(Users::isConnected()) {
-    $server = Servers::getServerByIdOwner();
+if(!Users::isConnected()) {
+    $server = Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
     $players = Players::createPlayersByServer($server->getIdServer());
     foreach ($players as $p) {
-        $webpage->appendContent($p->getIdPlayer());
+        $webpage->appendContent(<<<HTML
+        {$p->getIdPlayer()} <input type="checkbox">
+HTML
+);
     }
 }
 else {
