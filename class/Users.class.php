@@ -17,7 +17,7 @@ class Users
         } else {
             throw new Exception("Aucun utilisateur trouvé");
         }
-}
+    }
 
     public static function getUserConnect($login, $pwd){
         $res = selectRequest(array("login" => $login, "pwd" => $pwd),array(PDO::FETCH_CLASS => 'Users'),"*","Users","login = :login AND pwd = :pwd");
