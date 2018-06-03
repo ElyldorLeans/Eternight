@@ -11,10 +11,23 @@ $webpage->appendContent(<<<HTML
     </div>
         <a href="./purpose.php">A propos</a>
         <a href="./rules.php">Règles</a>
-        <a href="./create.php">Créer un salon</a>
-        <a href="./inscription.php">Inscription</a>
-        <a href="./connexion.php">Connexion</a>
+        <a href="./connexion.php">Inscription</a>
 HTML
     );
+
+if(Users::isConnected()){
+    try {
+        Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
+        $webpage->appendContent('<a href="./manageServer.php">Gestion</a>');
+        $webpage->appendContent('<a href="./listPlayers.php">Liste des joueurs</a>');
+    }
+    catch (Exception $e){
+        $webpage->appendContent('<a href="./create.php">Créer / Rejoindre un salon</a>');
+    }
+
+}
+
+
+
 
 echo($webpage->toHTML());

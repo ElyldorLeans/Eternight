@@ -15,12 +15,22 @@ $webpage->appendContent(<<<HTML
         <a href="./manageServer.php">Gestion du serveur</a>
 HTML
 );
-$server = Servers::getServerByIdOwner(1);
-$players = Players::createPlayersByServer($server->getIdServer());
 
-
-foreach($players as $p){
-    $webpage->appendContent($p->getIdPlayer());
+if(Users::isConnected()) {
+    $server = Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
+    $players = Players::createPlayersByServer($server->getIdServer());
+    $tableHL = "<table><tr><td>Joueurs Hors Ligne</td></tr>";
+    $tableIL = "<table><tr><td>Joueurs En Ligne</td></tr>";
+    foreach ($players as $p) {
+        $c = Users::getUserById($p->getIdPlayer());
+        if($c->getIsManual())$tableHL = $tableHL."<tr><td>{$p->getIdPlayer()} - {$p->getRole()}</td></tr>";
+        else $tableIL = $tableIL."<tr><td>{$p->getIdPlayer()} - {$p->getRole()}</td></tr>";
+    }
+    $webpage->appendContent($tableHL."</table>");
+    $webpage->appendContent($tableIL."</table>");
+}
+else {
+    header('Location: connexion.php?a=1'.SID);
 }
 
 echo($webpage->toHTML());
