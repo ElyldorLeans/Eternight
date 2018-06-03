@@ -5,13 +5,44 @@ require_once (projectPath.'inc/requestUtils.inc.php');
 
 class Players
 {
+    /**
+     * @var int
+     */
     private $idPlayer = null;
+    /**
+     * @var int
+     */
     private $idServer = null;
+    /**
+     * @var string
+     */
     private $role = null;
+    /**
+     * @var int
+     */
     private $phase = null;
+    /**
+     * @var int
+     */
     private $numPlayer = null;
+    /**
+     * @var string
+     */
     private $roadSheet = null;
 
+    /**
+     * @param $id int id of a player
+     * @return Players
+     * @throws Exception if no player has been found
+     */
+    public static function getPlayerById($id){
+        $res = selectRequest(array("id" => $id),array(PDO::FETCH_CLASS => 'Players'), "*","Players","idUser = :id");
+        if(isset($res[0])){
+            return $res[0];
+        } else {
+            throw new Exception("Aucun joueur trouvé");
+        }
+    }
 
     public static function createPlayersByServer($idServer){
         $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'),"*","Players","idServer = :idServer");
@@ -22,13 +53,28 @@ class Players
         }
     }
 
-
     public static function addPlayer($idServer,$idPlayer){
         try{
             insertRequest(array("idServer" => $idServer,"idPlayer" => $idPlayer),"Players(idPlayer,idServer)","(:idPlayer,:idServer)");
 
         } catch(Exception $e) {
             throw new Exception("Vous êtes déjà dans ce serveur");
+        }
+    }
+
+    /**
+     * Returns the village targets for the player with the given id.
+     * @param int id
+     * @param int idServer
+     * @return array(int)
+     */
+    static public function getTargetIdsForPlayer($id, $idServer) {
+        $res = selectRequest(array("id" => $id, "idServer" => $idServer), array(PDO::FETCH_CLASS => 'VillageTargets'),
+            "isTargeted","Players","idTargeter = :id AND idServer = :idServer");
+        if(isset($res)) {
+            return $res;
+        } else {
+            return array();
         }
     }
 
@@ -129,38 +175,67 @@ class Players
     }
 
     /**
-     * TODO
+     * Does the action associated to the role of the player with the given id.
      */
-    static public function action() {
-        // Un gros gros switch case
-    }
+    static public function action($playerId) {
+        $player = Players::getPlayerById($playerId);
 
-    /**
-     * The "Lycanthrope"'s action.
-     */
-    static public function actionLycanthrope() {
-        // Voter pour une victime => résolution à la fin de qui miam miam
-    }
+//        if (in_array($player->role, array("Loup Garou", "Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue"))) {
+//            self::actionLycanthrope($player);
+//        }
 
-    /**
-     * The "Voyante"'s action.
-     * @param bool $lycanthrope
-     */
-    static public function actionPsychic($lycanthrope = false) {
-        // Voir le rôle de quelqu'un, ou 3 rôle si lycanthrope
-    }
-
-    /**
-     * The "Statisticien"'s action.
-     */
-    static public function actionStatistician() {
-        // Avoir BEAUCOUP TRPO D'INFOS
+        switch ($player->role) {
+            case "Loup Blanc":
+                self::actionWhiteWerewolf($player);
+                break;
+            case "Voyante":
+                self::actionPsychic($player);
+                break;
+            case "Statistiscien":
+                self::actionStatistician($player);
+                break;
+            case "Voyante Corrompue":
+                self::actionPsychic($player, true);
+                break;
+            case "Sorcière Corrompue":
+                break;
+        }
     }
 
     /**
      * The "Loup Blanc"'s action.
+     * @param Players $player
      */
-    static public function actionWhiteWerewolf() {
+    static public function actionWhiteWerewolf($player) {
         // Manger du loup ?
+    }
+
+    /**
+     * The "Voyante"'s action.
+     * @param Players $player
+     * @param bool $lycanthrope
+     */
+    static public function actionPsychic($player, $lycanthrope = false) {
+        // Voir le rôle de quelqu'un, ou 3 rôle si lycanthrope
+
+    }
+
+    /**
+     * The "Statisticien"'s action.
+     * @param Players $player
+     */
+    static public function actionStatistician($player) {
+        // Avoir BEAUCOUP TROP D'INFOS
+    }
+
+    /**
+     * The "Sorcière"'s action.
+     * @param Players $player
+     * @param bool $lycanthrope
+     */
+    static public function actionSorcerer($player, $lycanthrope = false) {
+        if (lycanthrope == false) {
+            throw new BadMethodCallException("Sorcière action not implemented yet");
+        }
     }
 }
