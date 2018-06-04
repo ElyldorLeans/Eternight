@@ -36,7 +36,7 @@ class Players
      * @throws Exception if no player has been found
      */
     public static function getPlayerById($id){
-        $res = selectRequest(array("id" => $id),array(PDO::FETCH_CLASS => 'Players'), "*","Players","idUser = :id");
+        $res = selectRequest(array("id" => $id),array(PDO::FETCH_CLASS => 'Players'), "*","Players","idPlayer = :id");
         if(isset($res[0])){
             return $res[0];
         } else {
@@ -53,9 +53,9 @@ class Players
         }
     }
 
-    public static function addPlayer($idServer,$idPlayer){
+    public static function addPlayer($idServer,$idPlayer,$numPlayer){
         try{
-            insertRequest(array("idServer" => $idServer,"idPlayer" => $idPlayer),"Players(idPlayer,idServer)","(:idPlayer,:idServer)");
+            insertRequest(array("idServer" => $idServer,"idPlayer" => $idPlayer,"numPlayer" => $numPlayer),"Players(idPlayer,idServer,numPlayer)","(:idPlayer,:idServer,:numPlayer)");
 
         } catch(Exception $e) {
             throw new Exception("Vous êtes déjà dans ce serveur");

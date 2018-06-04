@@ -1,17 +1,17 @@
 <?php
 require_once('inc/autoload.inc.php');
 require_once('inc/utility.inc.php');
-// Si le membre n'est pas connecté
 if(!Users::isConnected()) {
-    // Authentifie le membre et le redirige sur index.php ( si les données sont valides)
-    if (verify($_POST, 'hiddenCrypt')) {
-        try {
-            $user = Users::createFromAuth($_POST['hiddenCrypt']);
-            $user->saveIntoSession();
+    if(isset($_POST['login']) && !empty($_POST['login']) && isset($_POST['pwd']) && !empty($_POST['pwd'])){
+        try{
+            $user = Users::getUserConnect($_POST['login'],$_POST['pwd']);
+            $user->SaveIntoSession();
             header('Location: index.php');
-            exit();
-        } catch (Exception $e) {
-           echo("lol");
+        } catch(Exception $e){
+            $webpage->appendContent(<<<HTML
+        <script>alert("Utilisateur inconnu")</script>
+HTML
+            );
         }
     }
 }

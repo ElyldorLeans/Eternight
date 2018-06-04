@@ -11,6 +11,18 @@ class Users
     private $email = null;
     private $isManual = null;
 
+    public function inServer(){
+        $res1 = selectRequest(array("id" => $this->idUser),array(PDO::FETCH_NUM),"idPlayer","Players","idPlayer = :id");
+        if(isset($res1[0]) && ($res1[0][0] != null )) return true;
+        else return false;
+    }
+
+    public function ownServer(){
+        $res1 = selectRequest(array("id" => $this->idUser),array(PDO::FETCH_NUM),"idOwner","Servers","idOwner = :id");
+        if(isset($res1[0]) && ($res1[0][0] != null )) return true;
+        else return false;
+    }
+
     /**
      * @return null
      */

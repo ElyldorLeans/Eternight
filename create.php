@@ -18,18 +18,29 @@ $webpage->appendContent(<<<HTML
 HTML
 );
 
+//On vérifie que l'utilisateur est connecté
 if(!Users::isConnected()){
     header('Location: connexion.php?a=1'.SID);
 }
+else {
+    $user = Users::getInstance();
+}
+
+if($user->inServer() || $user->ownServer()){
+    header('Location: index.php'.SID);
+}
+
+
 
 //On vérifie qu'on à reçu des données
 if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
   try{
       //On test que le serveur existe
       $server = Servers::getServerByName($_POST['serverName']);
+      $max =  selectRequest(array("id" => $server->getIdServer()),array(PDO::FETCH_ASSOC), "MAX(numPlayer) AS M","Players","idServer = :id");
       if($_POST['serverMode'] == "join"){
-          Players::addPlayer($server->getIdServer(),1);
-          echo("Vous êtes maintenant dans le serveur");
+          Players::addPlayer($server->getIdServer(),$user->getIdUser(),$max[0]["M"]+1);
+          header('Location: repartition.php'.SID);
       }
       else {
           echo("Le serveur existe déjà");
@@ -37,7 +48,8 @@ if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
   } catch (Exception $e){
         if($_POST['serverMode'] == "create"){
             //On créé le server, puis on ajoute le propriétaire à sa partie dans la table Players
-            Servers::createServer(1,$_POST['serverName']);
+            Servers::createServer($user->getIdUser(),$_POST['serverName']);
+            header('Location: listPlayers.php'.SID);
         }
         else {
             echo ($e->getMessage());

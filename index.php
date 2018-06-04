@@ -11,20 +11,25 @@ $webpage->appendContent(<<<HTML
     </div>
         <a href="./purpose.php">A propos</a>
         <a href="./rules.php">Règles</a>
-        <a href="./connexion.php">Inscription</a>
 HTML
     );
 
 if(Users::isConnected()){
-    try {
-        Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
-        $webpage->appendContent('<a href="./manageServer.php">Gestion</a>');
-        $webpage->appendContent('<a href="./listPlayers.php">Liste des joueurs</a>');
+    $user = Users::getInstance();
+    if(!$user->inServer() && !$user->ownServer()) $webpage->appendContent('<a href="./create.php">Créer / Rejoindre un salon</a>');
+    else {
+        if ($user->ownServer()) {
+            $webpage->appendContent('<a href="./manageServer.php">Gestion</a>');
+            $webpage->appendContent('<a href="./listPlayers.php">Liste des joueurs</a>');
+        }
     }
-    catch (Exception $e){
-        $webpage->appendContent('<a href="./create.php">Créer / Rejoindre un salon</a>');
-    }
-
+    $webpage->appendContent('<form action="authentification.php"> <button type="submit">Déconnexion</button></form>');
+}
+else {
+    $webpage->appendContent(<<<HTML
+        <a href="./connexion.php">Inscription</a>
+HTML
+);
 }
 
 
