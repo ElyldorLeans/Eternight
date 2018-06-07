@@ -30,7 +30,7 @@ class Webpage {
                  src="./images/eternight.png">
         </a>
         <a>
-            <h1>Eternight</h1>
+            <h1 class="display-3 text-success">Eternight</h1>
             <p><b>「エターナイト」</b></p>
         </a>
     </nav>
@@ -133,7 +133,7 @@ HTML
                 if ($user->ownServer()) {
                     $this->appendContent(<<<HTML
                             <li class="nav-item">
-                                <a class="nav-link" href="./manageServer.php">Gestion</a>
+                                <a class="nav-link" href="./manageServer.php">Gestion du serveur</a>
                             </li>
 HTML
                     );
@@ -180,7 +180,7 @@ HTML
         else {
             $this->appendContent(<<<HTML
                             <li class="nav-item">
-                                <a class="nav-link" href="./connexion.php">Inscription</a>
+                                <a class="nav-link" href="./connexion.php">Connexion</a>
                             </li>
                 </u1>
             </div>

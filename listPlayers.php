@@ -3,7 +3,12 @@
 require_once('inc/autoload.inc.php');
 
 $webpage = new Webpage("Eternight - Liste des Joueurs");
-
+$webpage->appendContent(<<<HTML
+    <div class="container" style="margin-top: 20px">
+        <h1 class="text-primary">LISTE DES JOUEURS</h1>
+        <hr class="alert-success">
+HTML
+);
 
 if(Users::isConnected()) {
     try{
