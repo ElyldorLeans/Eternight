@@ -69,8 +69,8 @@ class Players
      * @return array(int)
      */
     static public function getTargetIdsForPlayer($id, $idServer) {
-        $res = selectRequest(array("id" => $id, "idServer" => $idServer), array(PDO::FETCH_CLASS => 'VillageTargets'),
-            "isTargeted","Players","idTargeter = :id AND idServer = :idServer");
+        $res = selectRequest(array("id" => $id, "idServer" => $idServer), array(PDO::FETCH_NUM), "idTargeted","VillageTargets","idTargeter = :id AND idServer = :idServer");
+        // TODO Uniq and shit
         if(isset($res)) {
             return $res;
         } else {
