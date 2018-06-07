@@ -11,4 +11,14 @@ $webpage->appendContent(<<<HTML
 HTML
 );
 
+// FIXME Test.
+$webpage->appendContent(" AVANT   ");
+$targets = Players::getTargetIdsForPlayer(2, 1);
+foreach ($targets as $target) {
+    foreach ($target as $key => $value) {
+        $webpage->appendContent($key . " => " . $value . " : ");
+    }
+}
+$webpage->appendContent(" FIN   ");
+
 echo($webpage->toHTML());
