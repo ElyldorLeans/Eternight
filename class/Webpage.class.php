@@ -23,6 +23,20 @@ class Webpage {
      */
     public function __construct($title="DEFAULT") {
         $this->title= $title;
+        $this->appendContent(<<<HTML
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="./index.php" title="Eternight">
+            <img style="max-width:150px; margin-top: -7px;"
+                 src="./images/eternight.png">
+        </a>
+        <a>
+            <h1>Eternight</h1>
+            <p><b>「エターナイト」</b></p>
+        </a>
+    </nav>
+HTML
+);
+        $this->getMenu();
     }
 
     /**
@@ -109,7 +123,10 @@ HTML
                             <li class="nav-item">
                                 <a class="nav-link" href="./create.php">Créer / Rejoindre un salon</a>
                             </li>
-</ul>
+                </u1>
+            </div>
+        </nav>
+    </div>
 HTML
 );
             else {
@@ -153,6 +170,10 @@ HTML
                             <li class="nav-item">
                                 <a class="nav-link" href="./authentification.php">Déconnexion</a>
                             </li>
+                </u1>
+            </div>
+        </nav>
+    </div>
 HTML
 );
         }
@@ -161,9 +182,6 @@ HTML
                             <li class="nav-item">
                                 <a class="nav-link" href="./connexion.php">Inscription</a>
                             </li>
-HTML
-);
-    $this->appendContent(<<<HTML
                 </u1>
             </div>
         </nav>
@@ -187,20 +205,9 @@ HTML
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
         <script type="text/javascript" src="bootstrap/js/bootstrap.js" charset="UTF-8"></script>
         <title>{$this->title}</title>
-{$this->head}
+    {$this->head}
     </head>
     <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="./index.php" title="Eternight">
-            <img style="max-width:150px; margin-top: -7px;"
-                 src="./images/eternight.png">
-        </a>
-        <a>
-            <h1>Eternight</h1>
-            <p>「エターナイト」</p>
-        </a>
-    </nav>
-    {$this->getMenu()}
     {$this->body}
     </body>
 </html>

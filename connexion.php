@@ -5,11 +5,6 @@ require_once('inc/autoload.inc.php');
 $webpage = new Webpage("Eternight - Connexion");
 
 $webpage->appendJsUrl("js/inscription.js");
-$webpage->appendContent(<<<HTML
-        <a href="purpose.php">A propos</a>
-        <a href="rules.php">Règles</a>
-HTML
-);
 
 if(isset($_GET['a']) == 1){
     $webpage->appendContent(<<<HTML
