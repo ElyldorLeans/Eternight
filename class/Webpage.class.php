@@ -77,6 +77,36 @@ HTML
     }
 
     /**
+     * Générer le menu de la page courante
+     */
+    public function getMenu() {
+        $user = Users::getInstance();
+        if(Users::isConnected()){
+
+            if(!$user->inServer() && !$user->ownServer()) $this->appendContent('<a href="./create.php">Créer / Rejoindre un salon</a>');
+            else {
+                if ($user->ownServer()) {
+                    $this->appendContent('<a href="./manageServer.php">Gestion</a>');
+                    $this->appendContent('<a href="./listPlayers.php">Liste des joueurs</a>');
+                } else {
+                    if($user->inServer()){
+                        $this->appendContent('<a href="./game.php">Jeu</a>');
+                        $this->appendContent('<a href="./info.php">Informations</a>');
+                        $this->appendContent('<a href="./listPlayers.php">Liste des joueurs</a>');
+                    }
+                }
+            }
+            $this->appendContent('<form action="authentification.php"> <button type="submit">Déconnexion</button></form>');
+        }
+        else {
+            $this->appendContent(<<<HTML
+                <a href="./connexion.php">Inscription</a>
+HTML
+);
+        }
+    }
+
+    /**
      * Produire la page Web complète
      * @return string htmlcode
      */
@@ -93,6 +123,16 @@ HTML
 {$this->head}
     </head>
     <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand">
+            <img src="./images/eternight-150.png">
+        </a>
+        <a>
+            <h1>Eternight</h1>
+            <p>Parce qu'on n'avait pas de meilleur nom</p>
+        </a>
+    </nav>
+    {$this->getMenu()}
 {$this->body}
     </body>
 </html>
