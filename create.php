@@ -77,6 +77,6 @@ foreach($servers as $s){
     $webpage->appendContent("<form action='create.php' method='post'><input type='text' name='serverName' value='{$s->getNameServer()}' hidden> {$s->getNameServer()} <button name='serverMode' type='submit' value='join' class='btn'>Rejoindre</button></form>");
 }
 
-$webpage->appendContent("        <a href=\"./index.php\">Accueil</a>");
+$webpage->appendContent(">Accueil</a>");
 
 echo($webpage->toHTML());

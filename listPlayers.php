@@ -2,7 +2,7 @@
 
 require_once('inc/autoload.inc.php');
 
-$webpage = new Webpage("Eternight - Accueil");
+$webpage = new Webpage("Eternight - Liste des Joueurs");
 
 $webpage->appendContent(<<<HTML
         <a href="./purpose.php">A propos</a>

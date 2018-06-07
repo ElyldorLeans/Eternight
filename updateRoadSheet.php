@@ -12,5 +12,3 @@ if(isset($_REQUEST['user']) && !empty($_REQUEST['user'])){
         }
     }
 }
-
-echo("lol");

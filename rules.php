@@ -13,11 +13,9 @@ HTML
 
 // FIXME Test.
 $webpage->appendContent(" AVANT   ");
-$targets = Players::getTargetIdsForPlayer(2, 1);
+$targets = Players::getTargetIdsForPlayer(3, 1);
 foreach ($targets as $target) {
-    foreach ($target as $key => $value) {
-        $webpage->appendContent($key . " => " . $value . " : ");
-    }
+        $webpage->appendContent($target[0] + " ");
 }
 $webpage->appendContent(" FIN   ");
 

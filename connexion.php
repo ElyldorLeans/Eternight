@@ -6,8 +6,8 @@ $webpage = new Webpage("Eternight - Connexion");
 
 $webpage->appendJsUrl("js/inscription.js");
 $webpage->appendContent(<<<HTML
-        <a href="./purpose.php">A propos</a>
-        <a href="./rules.php">Règles</a>
+        <a href="purpose.php">A propos</a>
+        <a href="rules.php">Règles</a>
 HTML
 );
 
