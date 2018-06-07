@@ -86,8 +86,9 @@ HTML
 <html lang="fr">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-            <script type='text/javascript' src="js/jQuery.js"></script>
+        <script type='text/javascript' src="js/jQuery.js"></script>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+        <script type="text/javascript" src="bootstrap/js/bootstrap.js" charset="UTF-8"></script>
         <title>{$this->title}</title>
 {$this->head}
     </head>
