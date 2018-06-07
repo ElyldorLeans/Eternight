@@ -26,7 +26,7 @@ CREATE TABLE Players(
   role ENUM('En attente', 'Loup Garou', 'Loup Blanc', 'Voyante', 'Statistiscien', 'Voyante Corrompue', 'Sorcière Corrompue') NOT NULL DEFAULT 'En attente',
   phase INTEGER DEFAULT 0,
   numPlayer INTEGER,
-  roadSheet VARCHAR(256),
+  roadSheet LONGTEXT,
   isDead BOOL DEFAULT 0,
   PRIMARY KEY(idServer,idPlayer)
 )ENGINE=InnoDB;

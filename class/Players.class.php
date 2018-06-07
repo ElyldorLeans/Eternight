@@ -74,7 +74,7 @@ class Players
         if(isset($res)) {
             return $res;
         } else {
-            return array();
+            return null;
         }
     }
 
