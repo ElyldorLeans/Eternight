@@ -81,26 +81,93 @@ HTML
      */
     public function getMenu() {
         $user = Users::getInstance();
+        $this->appendContent(<<<HTML
+            <div class="bs-component">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+            
+                    <div class="collapse navbar-collapse" id="navbarColor02">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="./index.php">Accueil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./purpose.php">À propos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./rules.php">Règles</a>
+                            </li>
+                        
+                    
+HTML
+);
         if(Users::isConnected()){
 
-            if(!$user->inServer() && !$user->ownServer()) $this->appendContent('<a href="./create.php">Créer / Rejoindre un salon</a>');
+            if(!$user->inServer() && !$user->ownServer()) $this->appendContent(<<<HTML
+                            <li class="nav-item">
+                                <a class="nav-link" href="./create.php">Créer / Rejoindre un salon</a>
+                            </li>
+</ul>
+HTML
+);
             else {
                 if ($user->ownServer()) {
-                    $this->appendContent('<a href="./manageServer.php">Gestion</a>');
-                    $this->appendContent('<a href="./listPlayers.php">Liste des joueurs</a>');
+                    $this->appendContent(<<<HTML
+                            <li class="nav-item">
+                                <a class="nav-link" href="./manageServer.php">Gestion</a>
+                            </li>
+HTML
+                    );
+                    $this->appendContent(<<<HTML
+                            <li class="nav-item">
+                                <a class="nav-link" href="./listPlayers.php">Liste des joueurs</a>
+                            </li>
+HTML
+                    );
                 } else {
                     if($user->inServer()){
-                        $this->appendContent('<a href="./game.php">Jeu</a>');
-                        $this->appendContent('<a href="./info.php">Informations</a>');
-                        $this->appendContent('<a href="./listPlayers.php">Liste des joueurs</a>');
+                        $this->appendContent(<<<HTML
+                            <li class="nav-item">
+                                <a class="nav-link" href="./game.php">Jeu</a>
+                            </li>
+HTML
+                        );
+                        $this->appendContent(<<<HTML
+                            <li class="nav-item">
+                                <a class="nav-link" href="./info.php">Informations</a>
+                            </li>
+HTML
+                        );
+                        $this->appendContent(<<<HTML
+                            <li class="nav-item">
+                                <a class="nav-link" href="./listPlayers.php">Liste des joueurs</a>
+                            </li>
+HTML
+                        );
                     }
                 }
             }
-            $this->appendContent('<form action="authentification.php"> <button type="submit">Déconnexion</button></form>');
+            $this->appendContent(<<<HTML
+                            <li class="nav-item">
+                                <a class="nav-link" href="./authentification.php">Déconnexion</a>
+                            </li>
+HTML
+);
         }
         else {
             $this->appendContent(<<<HTML
-                <a href="./connexion.php">Inscription</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./connexion.php">Inscription</a>
+                            </li>
+HTML
+);
+    $this->appendContent(<<<HTML
+                </u1>
+            </div>
+        </nav>
+    </div>
 HTML
 );
         }
@@ -124,16 +191,17 @@ HTML
     </head>
     <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand">
-            <img src="./images/eternight-150.png">
+        <a class="navbar-brand" href="./index.php" title="Eternight">
+            <img style="max-width:150px; margin-top: -7px;"
+                 src="./images/eternight.png">
         </a>
         <a>
             <h1>Eternight</h1>
-            <p>Parce qu'on n'avait pas de meilleur nom</p>
+            <p>「エターナイト」</p>
         </a>
     </nav>
     {$this->getMenu()}
-{$this->body}
+    {$this->body}
     </body>
 </html>
 HTML;
