@@ -25,5 +25,18 @@ else {
     header('Location: connexion.php?a=1'.SID);
 }
 
+$webpage->appendToHead("<script>function deleteServer(){      
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        alert(this.responseText);
+     window.location.href = 'index.php';
+    }
+  };
+  xhttp.open('POST', 'playerDeleteDB.php?server=' + {$server->getIdServer()}, true);
+  xhttp.send();
+}}</script>");
+$webpage->appendContent("<h2>{$server->getNameServer()}</h2>");
+$webpage->appendContent("<button onclick='deleteServer()'>Fermer le salon</button>");
 echo($webpage->toHTML());
 

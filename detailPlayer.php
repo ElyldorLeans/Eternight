@@ -5,14 +5,6 @@ require_once ('inc/utility.inc.php');
 
 $webpage = new Webpage("Eternight - Détail du joueur");
 
-$webpage->appendContent(<<<HTML
-        <a href="./purpose.php">A propos</a>
-        <a href="./rules.php">Règles</a>
-        <a href="./listPlayers.php">Liste des joueurs</a>
-        <a href="./manageServer.php">Gestion du serveur</a>
-HTML
-);
-
 if(Users::isConnected()) {
     try{
         $server = Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
