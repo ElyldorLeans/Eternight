@@ -25,18 +25,144 @@ else {
     header('Location: connexion.php?a=1'.SID);
 }
 
-$webpage->appendToHead("<script>function deleteServer(){      
+// JAVASCRIPT
+$webpage->appendToHead(<<<HTML
+<script>
+function deleteServer(){
   var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
+  xhttp.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200) {
-        alert(this.responseText);
-     window.location.href = 'index.php';
+     window.location.href = "index.php";
     }
   };
-  xhttp.open('POST', 'playerDeleteDB.php?server=' + {$server->getIdServer()}, true);
+  xhttp.open("POST", "deleteServerDB.php?server=" + {$server->getIdServer()}, true);
   xhttp.send();
-}}</script>");
+}
+
+var myVar = setInterval(checkRepart, 1000);
+function checkRepart() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            repart = document.getElementById("repart");
+            repart.innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()}, true);
+    xhttp.send();
+}
+
+function checkPower() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            repart = document.getElementById("repart");
+            if(this.responseText == "PHASEEND"){
+                clearInterval(myVar);
+                document.getElementById("validate").style.visibility="visible";
+                document.getElementById("validate").onclick = function(){validePower();};
+            }
+            else{
+                repart.innerHTML = this.responseText;
+            }
+        }
+    };
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&p=true", true);
+    xhttp.send();
+}
+
+function checkVote() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            repart = document.getElementById("repart");
+            if(this.responseText == "PHASEEND"){
+                clearInterval(myVar);
+                document.getElementById("validate").style.visibility="visible";
+                document.getElementById("validate").onclick = function(){valideVote();};
+            }
+            else{
+                repart.innerHTML = this.responseText;
+            }
+        }
+    };
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&v=true", true);
+    xhttp.send();
+}
+
+
+function valideRepart(){
+   clearInterval(myVar);
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("validate").style.visibility="hidden";
+            document.getElementById("validate").onclick = function(){validePower();};
+            repart = document.getElementById("repart");
+            repart.innerHTML = this.responseText;
+            phase = document.getElementById("phase");
+            phase.innerHTML = "Phase de Pouvoirs";
+            myVar = setInterval(checkPower, 1000);
+        }
+    };
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&r=true", true);
+    xhttp.send();
+}
+
+function validePower(){
+   clearInterval(myVar);
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("validate").onclick = function(){endDeliberation();};
+            phase = document.getElementById("phase");
+            phase.innerHTML = "Phase des délibérations";
+            repart = document.getElementById("repart");
+            repart.innerHTML = "Délibérations en cours ...";
+        }
+    };
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&d=true", true);
+    xhttp.send();
+}
+
+function valideVote(){
+   clearInterval(myVar);
+   document.getElementById("validate").onclick = function(){validePower();};
+   document.getElementById("validate").style.visibility="hidden";
+   phase = document.getElementById("phase");
+   phase.innerHTML = "Phase de Pouvoirs";
+   myVar = setInterval(checkPower, 1000);
+}
+
+
+function endDeliberation(){
+     if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("validate").style.visibility="hidden";
+        document.getElementById("validate").onclick = function(){valideVote();};
+        phase = document.getElementById("phase");
+        phase.innerHTML = "Phase de Vote";
+        myVar = setInterval(checkVote, 1000);
+        }
+    };
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&d=true", true);
+    xhttp.send();
+
+}
+
+</script>
+HTML
+);
+
+//$webpage->appendJsUrl("js/repetedFunctions.js");
+/*****************************************/
+
 $webpage->appendContent("<h2>{$server->getNameServer()}</h2>");
 $webpage->appendContent("<button onclick='deleteServer()'>Fermer le salon</button>");
+$webpage->appendContent("<hr class=\"alert-success\">");
+$webpage->appendContent("<h2 id='phase'>Phase de répartition</h2>");
+$webpage->appendContent("<button id='validate' onclick='valideRepart()'> Valider </button>");
+$webpage->appendContent("<div id='repart'></div>");
+
+
 echo($webpage->toHTML());
 

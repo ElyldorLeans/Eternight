@@ -7,5 +7,3 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
     $server = $_REQUEST['server'];
     deleteRequest(array("idServer" => $server),"Servers","idServer = :idServer");
 }
-
-echo("lol");

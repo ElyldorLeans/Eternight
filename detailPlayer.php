@@ -34,7 +34,14 @@ $webpage->appendToHead(<<<HTML
 <script>
 function listRole(){
     var role = document.getElementById("role");
-    role.innerHTML = "<select id='rolechange' size='1'><option value='Loup Garou'>Loup Garou</option><option value='Voyante'>Voyante</option></select><button id='undo' onclick='undo()'>Annuler</button><button id='change' onclick='change()'>Changer</button>";
+    role.innerHTML = "<select id='rolechange' size='1'>" +
+     "<option value='Loup Garou'>Loup Garou</option>" +
+     "<option value='Voyante'>Voyante</option>" +
+     "<option value='Voyante Corrompue'>Voyante Corrompue</option>" +
+     "<option value='Sorcière Corrompue'>Sorcière Corrompue</option>" +
+     "<option value='Loup Blanc'>Loup Blanc</option>" +
+     "<option value='Statistiscien'>Statistiscien</option>" +
+      "</select><button id='undo' onclick='undo()'>Annuler</button><button id='change' onclick='change()'>Changer</button>";
 }
 
 function undo(){

@@ -9,6 +9,23 @@ class Servers {
     private $nameServer = null ;
     private $descServer = null ;
     private $idOwner = null ;
+    private $unjoinable = null;
+
+    /**
+     * @return null
+     */
+    public function getUnjoinable()
+    {
+        return $this->unjoinable;
+    }
+
+    /**
+     * @param null $unjoinable
+     */
+    public function setUnjoinable($unjoinable)
+    {
+        $this->unjoinable = $unjoinable;
+    }
 
     public static function createServer($idOwner,$nameServer){
         insertRequest(array("idOwner" => $idOwner, "nameServer" => $nameServer),"Servers(idOwner,nameServer)","(:idOwner, :nameServer)");
@@ -113,7 +130,24 @@ class Servers {
             throw new Exception("Aucun serveur trouvé");
     }
 
+    public static function getServerById($id)
+    {
+        $res = selectRequest(array("id" => $id), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers", "idServer = :id");
+        if (isset($res[0]))
+            return $res[0];
+        else
+            throw new Exception("Aucun serveur trouvé");
+    }
+
     public static function getServers(){
-        return selectRequest(array(),array(PDO::FETCH_CLASS => 'Servers'), "*","Servers","1");
+        $res = selectRequest(array(),array(PDO::FETCH_CLASS => 'Servers'), "*","Servers","1");
+        if (isset($res[0]))
+            return $res[0];
+        else
+            throw new Exception("Aucun serveur trouvé");
+    }
+
+    public function unjoinable(){
+        updateRequest(array("id" => $this->idServer),"Servers","unjoinable = 1","idServer = :id");
     }
 }

@@ -10,13 +10,6 @@ if(!Users::isConnected()){
 
 $webpage = new Webpage("Eternight - Accueil");
 
-$webpage->appendContent(<<<HTML
-    <div class="jumbotron text-center">
-        <h1>Eternight</h1>
-         <p>Parce qu'on avait pas de meilleur nom</p>
-    </div>
-HTML
-);
 
 //On vérifie que l'utilisateur est connecté
 if(!Users::isConnected()){

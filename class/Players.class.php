@@ -45,7 +45,7 @@ class Players
     }
 
     public static function createPlayersByServer($idServer){
-        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'),"*","Players","idServer = :idServer");
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'),"*","Players","idServer = :idServer","ORDER BY numPlayer");
         if(isset($res)){
             return $res;
         } else {
@@ -238,4 +238,32 @@ class Players
             throw new BadMethodCallException("Sorcière action not implemented yet");
         }
     }
+
+    /**
+     * @param idServer $idServer
+     * @return bool true if all players have used their powers, false if they didn't
+     * @throws Exception
+     */
+    public static function isPowerPhaseEnded($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'),"*","Players","idServer = :idServer AND phase != 2","ORDER BY numPlayer");
+        if(isset($a) && !empty($a)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+    /**
+     * @param idServer $idServer
+     * @return bool true if all players have used their powers, false if they didn't
+     * @throws Exception
+     */
+    public static function isVotePhaseEnded($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'),"*","Players","idServer = :idServer AND phase != 5","ORDER BY numPlayer");
+        if(isset($a) && !empty($a)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }
