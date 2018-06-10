@@ -54,6 +54,15 @@ class Users
         }
     }
 
+    public static function getUserByLogin($login){
+        $res = selectRequest(array("login" => $login),array(PDO::FETCH_CLASS => 'Users'), "*","Users","login = :login");
+        if(isset($res[0])){
+            return $res[0];
+        } else {
+            throw new Exception("Aucun utilisateur trouvé");
+        }
+    }
+
     public static function getUserConnect($login, $pwd){
         $res = selectRequest(array("login" => $login, "pwd" => $pwd),array(PDO::FETCH_CLASS => 'Users'),"*","Users","login = :login AND pwdUser = :pwd");
         if(isset($res[0])){
