@@ -96,13 +96,15 @@ function valideRepart(){
    var xhttp = new XMLHttpRequest();
    xhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("validate").style.visibility="hidden";
-            document.getElementById("validate").onclick = function(){validePower();};
-            repart = document.getElementById("repart");
-            repart.innerHTML = this.responseText;
-            phase = document.getElementById("phase");
-            phase.innerHTML = "Phase de Pouvoirs";
-            myVar = setInterval(checkPower, 1000);
+            if(this.responseText != "ERROR_NUM_PLAYER"){
+                document.getElementById("validate").style.visibility="hidden";
+                document.getElementById("validate").onclick = function(){validePower();};
+                repart = document.getElementById("repart");
+                repart.innerHTML = this.responseText;
+                phase = document.getElementById("phase");
+                phase.innerHTML = "Phase de Pouvoirs";
+                myVar = setInterval(checkPower, 1000);
+            }
         }
     };
     xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&r=true", true);
@@ -136,6 +138,8 @@ function valideVote(){
 
 
 function endDeliberation(){
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function(){
      if (this.readyState == 4 && this.status == 200) {
         document.getElementById("validate").style.visibility="hidden";
         document.getElementById("validate").onclick = function(){valideVote();};
@@ -146,7 +150,6 @@ function endDeliberation(){
     };
     xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&d=true", true);
     xhttp.send();
-
 }
 
 </script>
@@ -165,4 +168,3 @@ $webpage->appendContent("<div id='repart'></div>");
 
 
 echo($webpage->toHTML());
-
