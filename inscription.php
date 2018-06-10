@@ -5,18 +5,13 @@ if(!Users::isConnected()) {
     if(isset($_POST['login']) && !empty($_POST['login']) && isset($_POST['pwd']) && !empty($_POST['pwd'])){
         try{
             $user = Users::getUserByLogin($_POST['login']);
-            if(empty($user)){
+            header('Location: index.php');
+
+        } catch(Exception $e){
                 Users::createUser($_POST['login'],$_POST['pwd']);
                 $user = Users::getUserConnect($_POST['login'],$_POST['pwd']);
                 $user->SaveIntoSession();
                 header('Location: index.php');
-            }
-            else{
-                header('Location: index.php');
-            }
-        } catch(Exception $e){
-            //ajouter une erreur
-            echo($e);
         }
     }
 }
