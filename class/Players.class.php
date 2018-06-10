@@ -32,6 +32,21 @@ class Players {
      * @var bool
      */
     private $isDead = false;
+    /**
+     * @var string
+     */
+    private $roleInfos = null;
+    /**
+     * All the available roles.
+     * ATTENTION Ce tableau détermine l'ordre de résolution des actions par rôle.
+     * @var string[]
+     */
+    public static $roles = array("Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Loup Garou", "Statistiscien");
+    /**
+     * All the available roles.
+     * @var string[]
+     */
+    public static $lycanthropeRoles = array("Loup Garou", "Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue");
 
     /**
      * @param $id int id of a player
@@ -69,7 +84,7 @@ class Players {
      * Returns the village targets for the player with the given id.
      * @param int $idPlayer
      * @param int $idServer
-     * @return array(Players)
+     * @return Players[]
      */
     static public function getTargetsForPlayer ($idPlayer, $idServer) {
         $res = selectRequest(array("idPlayer" => $idPlayer, "idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "P.idServer, P.idPlayer, P.role, P.phase, P.numPlayer, P.roadSheet, P.isDead",
@@ -83,9 +98,59 @@ class Players {
     }
 
     /**
+     * Returns the village targets for the given role.
+     * @param string $role
+     * @param int $idServer
+     * @return Players[]
+     */
+    static public function getTargetsForRole ($role, $idServer) {
+        $res = selectRequest(array("role" => $role, "idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "P.idServer, P.idPlayer, P.role, P.phase, P.numPlayer, P.roadSheet, P.isDead",
+            "VillageTargets V, Players P", "V.idTargeter = :idPlayer AND V.idServer = :idServer AND P.role = :role");
+
+        if (isset($res)) {
+            return $res;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the werewolf main target for the given server.
+     * @param int $idServer
+     * @return int|null
+     */
+    static public function getMainWerewolfTarget ($idServer) {
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "idTargeted", "WerewolfTargets", "idServer = :idServer");
+
+        if (!isset($res)) {
+            return null;
+        }
+        foreach ($res as &$r) {
+            $r = $r[0];
+        }
+        $res = array_count_values($res);
+        $maxKey = key($res);
+        $maxValue = $res[0];
+        $doubleValue = false;
+        foreach ($res as $key => $value) {
+            if ($value > $maxValue) {
+                $maxValue = $value;
+                $maxKey = $key;
+                $doubleValue = false;
+            } else if ($value == $maxValue) {
+                $doubleValue = true;
+            }
+        }
+        if ($doubleValue) {
+            return null;
+        }
+        return $maxKey;
+    }
+
+    /**
      * Returns the name of the given player.
      * @param int $idServer
-     * @return array(Players)
+     * @return Players[]
      */
     static public function getPlayersForServer ($idServer) {
         $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer");
@@ -97,101 +162,127 @@ class Players {
     }
 
     /**
-     * @return null
+     * @return int
      */
     public function getIdPlayer () {
         return $this->idPlayer;
     }
 
     /**
-     * @param null $idPlayer
+     * @param int $idPlayer
      */
     public function setIdPlayer ($idPlayer) {
         $this->idPlayer = $idPlayer;
     }
 
     /**
-     * @return null
+     * @return int
      */
     public function getIdServer () {
         return $this->idServer;
     }
 
     /**
-     * @param null $idSrver
+     * @param int $idServer
      */
     public function setIdServer ($idServer) {
         $this->idServer = $idServer;
     }
 
     /**
-     * @return null
+     * @return int
      */
     public function getRole () {
         return $this->role;
     }
 
     /**
-     * @param null $idRole
+     * @param int $role
      */
     public function setIdRole ($role) {
         $this->role = $role;
     }
 
     /**
-     * @return null
+     * @return int
      */
     public function getPhase () {
         return $this->phase;
     }
 
     /**
-     * @param null $phase
+     * @param int $phase
      */
     public function setPhase ($phase) {
         $this->phase = $phase;
     }
 
     /**
-     * @return null
+     * @return int
      */
     public function getNumPlayer () {
         return $this->numPlayer;
     }
 
     /**
-     * @param null $numPlayer
+     * @param int $numPlayer
      */
     public function setNumPlayer ($numPlayer) {
         $this->numPlayer = $numPlayer;
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getRoadSheet () {
         return $this->roadSheet;
     }
 
     /**
-     * @param null $roadSheet
+     * @param string $roadSheet
      */
     public function setRoadSheet ($roadSheet) {
         $this->roadSheet = $roadSheet;
     }
 
     /**
-     * @return null
+     * @return bool
      */
     public function getIsDead () {
         return $this->isDead;
     }
 
     /**
-     * @param null $isDead
+     * @param bool $isDead
      */
     public function setIsDead ($isDead) {
         $this->isDead = $isDead;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoleInfos () {
+        return $this->roleInfos;
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    public function getValueInRoleInfos ($key) {
+        $values = json_decode($this->roleInfos, true);
+        if ($values == null) {
+            return null;
+        }
+        return $values[$key];
+    }
+
+    /**
+     * @param string $roleInfos
+     */
+    public function setRoleInfos ($roleInfos) {
+        $this->roleInfos = $roleInfos;
     }
 
     /**
@@ -200,8 +291,20 @@ class Players {
      */
     static public function resolveActions ($serverId) {
         $players = self::getPlayersForServer($serverId);
+        $werewolfTargetId = self::getMainWerewolfTarget($serverId);
+        if ($werewolfTargetId != null) {
+            self::kill($werewolfTargetId, $serverId);
+        }
+        $playersByRole = array();
         foreach ($players as $player) {
-            self::action($player);
+            $playersByRole[$player->role][] = $player;
+        }
+        foreach (self::$roles as $role) {
+            if (isset($playersByRole[$role])) {
+                foreach ($playersByRole[$role] as $player) {
+                    self::action($player);
+                }
+            }
         }
     }
 
@@ -218,6 +321,9 @@ class Players {
         switch ($player->role) {
             case "Loup Blanc":
                 self::actionWhiteWerewolf($player);
+                break;
+            case "Loup Garou":
+                self::actionWerewolf($player);
                 break;
             case "Voyante":
                 self::actionPsychic($player);
@@ -239,10 +345,30 @@ class Players {
      * @param Players $player
      */
     static public function actionWerewolf ($player) {
-        $infoToWrite = "Tour :\n\n";
-        // TODO Get cible lycanthropes
-        // TODO Know it died
-        // TODO Know cibles sorcières
+        $infoToWrite = "Tour :\n";
+        $targetId = self::getMainWerewolfTarget($player->idServer);
+        if ($targetId == null) {
+            $infoToWrite .= "\nLes lycanthropes ne se sont pas mis d'accord sur qui manger cette nuit.";
+        } else {
+            $werewolfTarget = self::getPlayerById($targetId);
+            $infoToWrite .= "\nLa cible des lycanthropes est " . self::getNamePlayer($werewolfTarget) . ". ";
+            if ($werewolfTarget->isDead) {
+                $infoToWrite .= "Elle est bien morte.";
+            } else {
+                $infoToWrite .= "Elle n'est pas morte.";
+            }
+        }
+
+        $sorcererTargets = self::getTargetsForRole("Sorcière", $player->idServer);
+        if ($sorcererTargets != null) {
+            $infoToWrite .= "\n" . self::getNamePlayer(array_pop($sorcererTargets));
+            foreach ($sorcererTargets as $target) {
+                $infoToWrite .= ", " . self::getNamePlayer($target);
+            }
+            $infoToWrite .= (count($sorcererTargets) == 0 ? "a été visé" : "ont été visés") . " par une/des sorcière(s).";
+        } else {
+            $infoToWrite .= "\nPersonne n'a été visé par une sorcière cette nuit.";
+        }
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
     }
@@ -252,15 +378,16 @@ class Players {
      * @param Players $player
      */
     static public function actionWhiteWerewolf ($player) {
-        $infoToWrite = "Tour :\n\n";
+        $infoToWrite = "Tour :\n";
         $targets = self::getTargetsForPlayer($player->idPlayer, $player->idServer);
         if ($targets == null) {
-            $infoToWrite .= "\nTu as décidé de ne manger aucun loup.";
+            $infoToWrite .= "\nTu as décidé de ne tuer aucun loup.";
         } else {
-            $infoToWrite .= "\nTu as décidé de manger " . self::getNamePlayer($targets[0]) . ".";
-            // TODO Si la cible est un loup
-            // TODO Alors tuer
-            // TODO Sinon rien lol
+            $infoToWrite .= "\nTu as décidé de tuer " . self::getNamePlayer($targets[0]) . ".";
+            // Ne tue que si la cible est lycanthrope
+            if (in_array($targets[0]->role, Players::$lycanthropeRoles)) {
+                self::kill($targets[0]->idPlayer, $targets[0]->idServer);
+            }
         }
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
@@ -272,10 +399,26 @@ class Players {
      * @param bool $lycanthrope
      */
     static public function actionPsychic ($player, $lycanthrope = false) {
-        $infoToWrite = "Tour :\n\n";
+        $infoToWrite = "Tour :\n";
         $targets = self::getTargetsForPlayer($player->idPlayer, $player->idServer);
-        $infoToWrite .= "\nTu as visé " . self::getNamePlayer($targets[0]) . ".";
-        // TODO Voir le rôle de quelqu'un, ou 3 rôle si lycanthrope
+        $name = self::getNamePlayer($targets[0]);
+        $infoToWrite .= "\nTu as visé " . $name . ".";
+        if (!$lycanthrope) {
+            $infoToWrite .= "\nTu sais que " . $name . " a pour rôle \"" . $targets[0]->role . "\".";
+        } else {
+            $roleList = self::$roles;
+            if (($key = array_search($player->role, $roleList)) !== false) {
+                unset($roleList[$key]);
+            }
+            $randomRoles = array($targets[0]->role);
+            shuffle($roleList);
+            array_push($randomRoles, array_pop($roleList));
+            shuffle($roleList);
+            array_push($randomRoles, array_pop($roleList));
+            shuffle($randomRoles);
+
+            $infoToWrite .= "\nTu sais que " . $name . " a pour rôle soit \"" . $randomRoles[0] . "\", soit \"" . $randomRoles[1] . "\", soit \"" . $randomRoles[2] . "\".";
+        }
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
     }
@@ -285,13 +428,13 @@ class Players {
      * @param Players $player
      */
     static public function actionStatistician ($player) {
-        $infoToWrite = "Tour :\n\n";
+        $infoToWrite = "Tour :\n";
         $targets = self::getTargetsForPlayer($player->idPlayer, $player->idServer);
         $infoToWrite .= "\nTu as visé " . self::getNamePlayer($targets[0]) . ", " . self::getNamePlayer($targets[1]) . " et " . self::getNamePlayer($targets[2]) . ".";
         $infoToWrite .= "\nAu moins un lycanthrope dans les personnes visées ? " . (self::hasLycanthrope($targets[0], $targets[1], $targets[2]) ? "Oui" : "Non");
         $infoToWrite .= "\nNombre de personnes mortes : " . self::getNumberDead($player->idServer);
         $infoToWrite .= "\nNombre de lycanthropes : " . self::getNumberLycanthrope($player->idServer);
-        // TODO résultat du vote du village précédent ?
+        // TODO résultat du vote du village précédent ? #chiant/20
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
     }
@@ -302,17 +445,25 @@ class Players {
      * @param bool $lycanthrope
      */
     static public function actionSorcerer ($player, $lycanthrope = false) {
-        if (lycanthrope == false) {
+        if (!$lycanthrope) {
             throw new BadMethodCallException("Sorcière action not implemented yet");
         }
-        $infoToWrite = "Tour :\n\n";
-        $targets = self::getTargetsForPlayer($player->idPlayer, $player->idServer);
-        if ($targets == null) {
-            $infoToWrite .= "\nTu n'as visé personne.";
+        $infoToWrite = "Tour :\n";
+        if ($player->getValueInRoleInfos("sorcererPower") == true) {
+            $infoToWrite .= "\nTon pouvoir étant déjà utilisé, tu n'as rien pu faire ce tour-ci.";
         } else {
-            $infoToWrite .= "\nTu as visé " . self::getNamePlayer($targets[0]) . ".";
-            // TODO Si la cible est déjà en vie, garder le pouvoir
-            // TODO Sinon, dépenser le pouvoir définitivement (How tho ?)
+            $targets = self::getTargetsForPlayer($player->idPlayer, $player->idServer);
+            if ($targets == null) {
+                $infoToWrite .= "\nTu n'as visé personne.";
+            } else {
+                $target = $targets[0];
+                $infoToWrite .= "\nTu as visé " . self::getNamePlayer($target) . ".";
+                // Ne ressusciter la cible que si elle est morte.
+                if ($target->isDead) {
+                    self::resurrect($player->idPlayer, $player->idServer);
+                    self::writeInRoleInfos($player, array("sorcererPower" => true));
+                }
+            }
         }
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
@@ -370,16 +521,32 @@ class Players {
      */
     static public function hasLycanthrope ($player1, $player2, $player3) {
         //"AND (role = 'Loup Garou' OR role = 'Loup Blanc' OR role = 'Voyante Corrompue' OR role = 'Sorcière Corrompue')");
-        if (in_array($player1->role, array("Loup Garou", "Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue"))) {
+        if (in_array($player1->role, Players::$lycanthropeRoles)) {
             return true;
         }
-        if (in_array($player2->role, array("Loup Garou", "Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue"))) {
+        if (in_array($player2->role, Players::$lycanthropeRoles)) {
             return true;
         }
-        if (in_array($player3->role, array("Loup Garou", "Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue"))) {
+        if (in_array($player3->role, Players::$lycanthropeRoles)) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Adds the given values in the roleInfos field for the given player.
+     * @param Players $player
+     * @param array $values
+     */
+    static public function writeInRoleInfos ($player, $values) {
+        if ($player->roleInfos != null) {
+            $jsonValues = json_decode($player->roleInfos, true);
+        } else {
+            $jsonValues = array();
+        }
+        $jsonValues = array_merge($jsonValues, $values);
+        $text = json_encode($jsonValues);
+        updateRequest(array("idPlayer" => $player->idPlayer, "idServer" => $player->idServer, "text" => $text), "Players", "roleInfos = :text", "idServer = :idServer AND idPlayer = :idPlayer");
     }
 
     /**
@@ -390,6 +557,24 @@ class Players {
      */
     static public function writeInRoadSheet ($idPlayer, $idServer, $text) {
         updateRequest(array("idPlayer" => $idPlayer, "idServer" => $idServer, "text" => $text), "Players", "roadSheet = IFNULL( CONCAT(roadSheet, :text), :text )", "idServer = :idServer AND idPlayer = :idPlayer");
+    }
+
+    /**
+     * Appends the given text in the RoadSheet.
+     * @param int $idPlayer
+     * @param int $idServer
+     */
+    static public function resurrect ($idPlayer, $idServer) {
+        updateRequest(array("idPlayer" => $idPlayer, "idServer" => $idServer), "Players", "isDead = false", "idServer = :idServer AND idPlayer = :idPlayer");
+    }
+
+    /**
+     * Appends the given text in the RoadSheet.
+     * @param int $idPlayer
+     * @param int $idServer
+     */
+    static public function kill ($idPlayer, $idServer) {
+        updateRequest(array("idPlayer" => $idPlayer, "idServer" => $idServer), "Players", "isDead = true", "idServer = :idServer AND idPlayer = :idPlayer");
     }
 
     /**

@@ -28,6 +28,7 @@ CREATE TABLE Players(
   numPlayer INTEGER,
   roadSheet LONGTEXT,
   isDead BOOL DEFAULT 0,
+  roleInfos TEXT,
   PRIMARY KEY(idServer,idPlayer)
 )ENGINE=InnoDB;
 
