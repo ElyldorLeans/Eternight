@@ -29,7 +29,7 @@ $webpage->appendContent(<<<HTML
                 </div>
                 <div class="col-sm-10 mr-sm-2 float-right" style="margin-top: 20px">
                     <button class="btn btn-success" type="submit" formaction="authentification.php">Connexion</button>
-                    <button class="btn btn-success" onclick="crypt()">Inscription</button>
+                    <button class="btn btn-success" type="submit" formaction="inscription.php">Inscription</button>
                 </div>
             </div>            
         </form>

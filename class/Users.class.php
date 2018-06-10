@@ -39,6 +39,12 @@ class Users
         $this->isManual = $isManual;
     }
 
+
+    public static function createUser($login,$pwd){
+        insertRequest(array("login" => $login, "pwd" =>$pwd),"Users(login,pwdUser)","(:login,:pwd)");
+    }
+
+
     public static function getUserById($id){
         $res = selectRequest(array("id" => $id),array(PDO::FETCH_CLASS => 'Users'), "*","Users","idUser = :id");
         if(isset($res[0])){
