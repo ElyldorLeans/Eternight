@@ -8,7 +8,7 @@ if(!Users::isConnected()){
     exit();
 }
 
-$webpage = new Webpage("Eternight - Accueil");
+$webpage = new Webpage("Eternight - Création");
 
 
 //On vérifie que l'utilisateur est connecté
@@ -53,14 +53,25 @@ if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
 $servers = Servers::getServers();
 
 $webpage->appendContent(<<<HTML
+    <div class="container" style="margin-top: 20px">
+            <h1 class="text-primary">CRÉER / REJOINDRE UN SALON</h1>
+            <hr class="alert-success">
+            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#create" aria-pressed="false">
+                Single toggle
+            </button>
+            <div id="create">
+                Create
+            </div>
+            
             <form action="create.php" method="post">
                <input type="radio" name="serverMode" id="create" value="create" required>
-               <label for="create">Créer un serveur</label>
+               <label for="create">Créer un salon</label>
                <input type="radio" name="serverMode" id="join" value="join" required>
-               <label for="create">Rejoindre un serveur</label>
+               <label for="create">Rejoindre un salon</label>
                <input type="text" name="serverName" required>  
-               <button type="submit" class="btn">X</button>                
+               <button type="submit" class="btn">Valider</button>                
             </form>
+    </div>
 HTML
 );
 
@@ -69,7 +80,5 @@ foreach($servers as $s){
     //$webpage->appendContent("<p>{$s->getNameServer()} de {$proprio->getLogin()}</p>");
     $webpage->appendContent("<form action='create.php' method='post'><input type='text' name='serverName' value='{$s->getNameServer()}' hidden> {$s->getNameServer()} <button name='serverMode' type='submit' value='join' class='btn'>Rejoindre</button></form>");
 }
-
-$webpage->appendContent(">Accueil</a>");
 
 echo($webpage->toHTML());

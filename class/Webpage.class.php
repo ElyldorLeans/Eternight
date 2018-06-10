@@ -30,8 +30,10 @@ class Webpage {
                  src="./images/eternight.png">
         </a>
         <a>
-            <h1 class="display-3 text-success">Eternight</h1>
-            <p><b>「エターナイト」</b></p>
+        <div class="col-sm-5">
+            <h1 class="display-3 text-success float-left">Eternight</h1>
+            <p class="float-left"><b>「エターナイト」</b></p>
+        </div>
         </a>
     </nav>
 HTML
@@ -123,17 +125,13 @@ HTML
                             <li class="nav-item">
                                 <a class="nav-link" href="./create.php">Créer / Rejoindre un salon</a>
                             </li>
-                </u1>
-            </div>
-        </nav>
-    </div>
 HTML
 );
             else {
                 if ($user->ownServer()) {
                     $this->appendContent(<<<HTML
                             <li class="nav-item">
-                                <a class="nav-link" href="./manageServer.php">Gestion du serveur</a>
+                                <a class="nav-link" href="./manageServer.php">Gestion du salon</a>
                             </li>
 HTML
                     );
