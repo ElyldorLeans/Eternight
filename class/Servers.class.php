@@ -140,11 +140,12 @@ class Servers {
     }
 
     public static function getServers(){
-        $res = selectRequest(array(),array(PDO::FETCH_CLASS => 'Servers'), "*","Servers","1");
-        if (isset($res[0]))
-            return $res[0];
-        else
-            throw new Exception("Aucun serveur trouvé");
+        try {
+            $res = selectRequest(array(), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers", "1");
+            return $res;
+        } catch(Exception $e) {
+            return(null);
+        }
     }
 
     public function unjoinable(){

@@ -160,10 +160,10 @@ HTML
 /*****************************************/
 
 $webpage->appendContent("<h2>{$server->getNameServer()}</h2>");
-$webpage->appendContent("<button onclick='deleteServer()'>Fermer le salon</button>");
+$webpage->appendContent("<button class='btn btn-warning' onclick='deleteServer()'>Fermer le salon</button>");
 $webpage->appendContent("<hr class=\"alert-success\">");
 $webpage->appendContent("<h2 id='phase'>Phase de répartition</h2>");
-$webpage->appendContent("<button id='validate' onclick='valideRepart()'> Valider </button>");
+$webpage->appendContent("<button class='btn btn-success' id='validate' onclick='valideRepart()'> Valider </button>");
 $webpage->appendContent("<div id='repart'></div>");
 
 

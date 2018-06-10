@@ -31,7 +31,7 @@ if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
       //On test que le serveur existe
       $server = Servers::getServerByName($_POST['serverName']);
       $max =  selectRequest(array("id" => $server->getIdServer()),array(PDO::FETCH_ASSOC), "MAX(numPlayer) AS M","Players","idServer = :id");
-      if($_POST['serverMode'] == "join"){
+      if($_POST['serverMode'] == "joinBtn"){
           Players::addPlayer($server->getIdServer(),$user->getIdUser(),$max[0]["M"]+1);
           header('Location: repartition.php'.SID);
       }
@@ -39,7 +39,7 @@ if(isset($_POST['serverName']) && isset($_POST['serverMode'])){
           echo("Le serveur existe déjà");
       }
   } catch (Exception $e){
-        if($_POST['serverMode'] == "create"){
+        if($_POST['serverMode'] == "createBtn"){
             //On créé le server, puis on ajoute le propriétaire à sa partie dans la table Players
             Servers::createServer($user->getIdUser(),$_POST['serverName']);
             header('Location: listPlayers.php'.SID);
@@ -56,29 +56,65 @@ $webpage->appendContent(<<<HTML
     <div class="container" style="margin-top: 20px">
             <h1 class="text-primary">CRÉER / REJOINDRE UN SALON</h1>
             <hr class="alert-success">
-            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#create" aria-pressed="false">
-                Single toggle
-            </button>
-            <div id="create">
-                Create
-            </div>
             
-            <form action="create.php" method="post">
-               <input type="radio" name="serverMode" id="create" value="create" required>
-               <label for="create">Créer un salon</label>
-               <input type="radio" name="serverMode" id="join" value="join" required>
-               <label for="create">Rejoindre un salon</label>
-               <input type="text" name="serverName" required>  
-               <button type="submit" class="btn">Valider</button>                
-            </form>
+            <!--<form class="form-inline my-2 my-lg-10" action="create.php" method="post">-->
+               <!--<input type="radio" name="serverMode" id="create" value="create" required>-->
+               <!--<label for="create">Créer un salon</label>-->
+               <!--<input type="radio" name="serverMode" id="join" value="join" required>-->
+               <!--<label for="create">Rejoindre un salon</label>-->
+               <!--<input type="text" name="serverName" required>  -->
+               <!--<button type="submit" class="btn">Valider</button>                -->
+            <!--</form>-->
+            
+            <div id="accordion">
+            
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button name="serverMode" value="createBtn" id="createBtn" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                      Créer un salon
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                      <form class="form-inline my-2 my-lg-10" action="create.php" method="post">
+                            <label for="create" class="col-sm-2 col-form-label">Nom du salon</label>
+                            <input class="form-control" type="text" name="serverName" id="create" required/> 
+                            <button type="submit" class="btn btn-success">Créer</button>
+                      </form>
+                  </div>
+                </div>
+                
+                
+              <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h5 class="mb-0">
+                    <button name="serverMode" value="joinBtn" id="joinBtn" class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Rejoindre un salon
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                  <div class="card-body">
+                      <form class="form-inline my-2 my-lg-10">
+                            <label for="join" class="col-sm-2 col-form-label">Nom du salon</label>
+                            <input class="form-control" type="text" id="join" name="serverName" required/> 
+                            <button type="submit" class="btn btn-success">Rejoindre</button>
+                      </form>
+                  </div>
+                </div>
+              </div>
     </div>
 HTML
 );
 
-foreach($servers as $s){
-    //$proprio = Users::getUserById($s->getIdOwner());
-    //$webpage->appendContent("<p>{$s->getNameServer()} de {$proprio->getLogin()}</p>");
-    $webpage->appendContent("<form action='create.php' method='post'><input type='text' name='serverName' value='{$s->getNameServer()}' hidden> {$s->getNameServer()} <button name='serverMode' type='submit' value='join' class='btn'>Rejoindre</button></form>");
+if (!empty($servers)) {
+    foreach ($servers as $s) {
+        //$proprio = Users::getUserById($s->getIdOwner());
+        //$webpage->appendContent("<p>{$s->getNameServer()} de {$proprio->getLogin()}</p>");
+        $webpage->appendContent("<form action='create.php' method='post'><input type='text' name='serverName' value='{$s->getNameServer()}' hidden> {$s->getNameServer()} <button name='serverMode' type='submit' value='join' class='btn'>Rejoindre</button></form>");
+    }
 }
 
 echo($webpage->toHTML());
