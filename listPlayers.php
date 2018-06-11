@@ -15,14 +15,15 @@ if(Users::isConnected()) {
     try{
         $server = Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
         $players = Players::getPlayersForServer($server->getIdServer());
-        $tableHL = "<table><tr><td>Joueurs Hors Ligne</td></tr>";
-        $tableIL = "<table><tr><td>Joueurs En Ligne</td></tr>";
+        $tableHL = "<table><tr><td><h2>Joueurs Hors Ligne</h2></td></tr>";
+        $tableIL = "<table><tr><td><h2>Joueurs En Ligne</h2></td></tr>";
         foreach ($players as $p) {
             $c = Users::getUserById($p->getIdPlayer());
             if($c->getIsManual())$tableHL = $tableHL."<tr><td>{$p->getNumPlayer()} - {$p->getRole()}</td></tr>";
             else $tableIL = $tableIL."<tr><td><a href='detailPlayer.php?id={$p->getIdPlayer()}'> {$p->getNumPlayer()} - {$p->getRole()}</a></td></tr>";
         }
         $webpage->appendContent($tableHL."</table>");
+        $webpage->appendContent("<hr class='alert-success'>");
         $webpage->appendContent($tableIL."</table>");
     }
     catch(Exception $e){
