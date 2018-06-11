@@ -18,14 +18,13 @@ if(Users::isConnected()) {
         $players = Players::getPlayersForServer($server->getIdServer());
         $idUser = $_SESSION['User']->getIdUser();
         $playersHTML = array();
-        $select = "<select name='player'>";
+        $select = "<select id='playerSelect' name='playerSelect'>";
         foreach ($players as $p){
             $playersHTML[$p->getIdPlayer()] = Players::getNamePlayer($p);
-            if(!$p->getIdPlayer() == $idUser){
+            if($p->getIdPlayer() != $idUser){
                 $select = $select."<option value ='".$p->getIdPlayer()."'>".Players::getNamePlayer($p)."</option>";
             }
         }
-        $select = $select."</select>";
 
 
     }
@@ -51,72 +50,144 @@ function quitServer(){
   xhttp.open("POST", "quitServerDB.php?id=" + {$idUser}, true);
   xhttp.send();
 }
+
+    function voteWhiteLych() {
+        var div = document.getElementById("divPlayer");
+        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteWhiteLych()'>Valider</button>";
+    }
+    
+    function voteCorruptedPsy(){
+        alert("bite");
+    }
+    
+    function voteCorruptedSorc(){
+       alert("bite"); 
+    }
+    
+    function voteLych() {
+      var div = document.getElementById("divPlayer");
+        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteLych()'>Valider</button>";
+    }
+    
+    function votePsy(){
+        alert("bite");
+    }
+    
+    function voteStat(){
+    alert("bite");
+    }
+    
+    
+    function submitVoteWhiteLych() {
+        var idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
+        if(idt != -1){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200) {
+                alert(this.responseText);
+                voteLych();
+            }
+        };
+        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idwl=" + {$idUser} + "&idt=" + idt, true);
+        xhttp.send();
+    }
+    else {
+            voteLych();
+    }  
+}
+
+    function submitVoteLych() {
+        var idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
+        if(idt != -1){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200) {
+                alert(this.responseText);
+                voteLych();
+            }
+        };
+        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idwl=" + {$idUser} + "&idt=" + idt, true);
+        xhttp.send();
+    }
+    else {
+            voteLych();
+    }  
+}
+
 function getFormByRole(){
-    var role = {$player->getRole()}
+    var role = "{$player->getRole()}";
     document.getElementById("phase").innerHTML = "Phase de Pouvoirs";
     var div = document.getElementById("divPlayer");
     switch(role){
         case "Loup Blanc":
-            
+            voteWhiteLych();
             break;
         case "Voyante Corrompue":
+            voteCorruptedPsy();
             break;
         case "Sorcière Corrompue":
+            voteCorruptedSorc();
             break;
         case "Voyante":
+            votePsy();
             break;
         case "Loup Garou":
+            voteLych()
             break;
         case "Statistiscien":
+            voteStat();
             break;
     }
 }
-var myVar;
-var phase = {$player->getPhase()};
-switch(phase){
-    case 0:
-        myVar = setInterval(checkReady,1000);
-        break;
-    case 1:
-        getFormByRole();
-        break;
-    case 2:
-        myVar = setInterval(checkReady,1000);
-        break;
-    case 3:
-        myVar = setInterval(checkReady,1000);
-        break;
-    case 4:
-        myVar = setInterval(checkReady,1000);
-        break;
-    case 5:
-        myVar = setInterval(checkReady,1000);
-        break;
-    default :
-        break;
-}
 
- myVar = setInterval(checkReady, 1000);
-
-function checkReady(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){
-        if (this.readyState == 4 && this.status == 200) {
-            div = document.getElementById("divPlayer");
-            if(this.responseText == "NOT_READY"){
-                div.innerHTML = "En attente de la répartition";
-            }
-            else {
-                clearInterval(ready);
-                getFormByRole();
-            }
-        }
-    };
-    xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()}, true);
-    xhttp.send();
     
-}
-
+$(document).ready(function () {
+    var myVar;
+    var phase = "{$player->getPhase()}";
+    switch(phase){
+        case "0":
+            myVar = setInterval(checkReady,1000);
+            break;
+        case "1":
+            getFormByRole();
+            break;
+        case 2:
+            myVar = setInterval(checkReady,1000);
+            break;
+        case 3:
+            myVar = setInterval(checkReady,1000);
+            break;
+        case 4:
+            myVar = setInterval(checkReady,1000);
+            break;
+        case 5:
+            myVar = setInterval(checkReady,1000);
+            break;
+        default :
+            break;
+    }
+    
+     myVar = setInterval(checkReady, 1000);
+    
+    function checkReady(){
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200) {
+                div = document.getElementById("divPlayer");
+                if(this.responseText == "NOT_READY"){
+                    div.innerHTML = "En attente de la répartition";
+                }
+                else {
+                    clearInterval(myVar);
+                    getFormByRole();
+                }
+            }
+        };
+        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()}, true);
+        xhttp.send();
+        
+    }  
+});
 </script>
 HTML
 );
