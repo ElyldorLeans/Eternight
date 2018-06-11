@@ -37,7 +37,7 @@ if (isset($_POST['serverName']) && isset($_POST['serverMode'])) {
         }
     } catch (Exception $e) {
         if ($_POST['serverMode'] == "create") {
-            //On créé le server, puis on ajoute le propriétaire à sa partie dans la table Players
+            // On créé le server, puis on ajoute le propriétaire à sa partie dans la table Players
             Servers::createServer($user->getIdUser(), $_POST['serverName']);
             header('Location: listPlayers.php' . SID);
         } else {
