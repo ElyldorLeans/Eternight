@@ -96,7 +96,7 @@ function quitServer(){
     }  
 }
 
-    function submitVoteWhiteLych() {
+    function submitVoteLych() {
         var idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
         if(idt != -1){
             var xhttp = new XMLHttpRequest();
