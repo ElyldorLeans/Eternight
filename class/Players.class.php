@@ -605,4 +605,23 @@ class Players {
         }
     }
 
+    public static function isRepartPhaseEnded($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 1", "ORDER BY numPlayer");
+        if (isset($a) && !empty($a)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static function getMinimumPhase($idServer){
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "min(phase)", "Players", "idServer = :idServer");
+        if(isset($res) && !empty($res)){
+            return $res[0];
+        }
+        else {
+            return -1;
+        }
+    }
+
 }
