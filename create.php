@@ -89,12 +89,7 @@ $webpage->appendContent(<<<HTML
                                 <input class="form-control" type="text" id="join" name="serverName" required/> 
                                 <button type="submit" class="btn btn-success">Rejoindre</button>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                        
 HTML
 );
 
@@ -102,8 +97,31 @@ if (!empty($servers)) {
     foreach ($servers as $s) {
         //$proprio = Users::getUserById($s->getIdOwner());
         //$webpage->appendContent("<p>{$s->getNameServer()} de {$proprio->getLogin()}</p>");
-        $webpage->appendContent("<form action='create.php' method='post'><input type='text' name='serverName' value='{$s->getNameServer()}' hidden> {$s->getNameServer()} <button name='serverMode' type='submit' value='join' class='btn'>Rejoindre</button></form>");
+        $webpage->appendContent(<<<HTML
+                            <form class="form-inline my-2 my-lg-10" action='create.php' method='post'>
+                                <label for='join2' class='col-sm-2 col-form-label' name='serverName'>{$s->getNameServer()}</label>
+                                <input type='text' id='join2' name='serverName' value='{$s->getNameServer()}' hidden> 
+                                <button name='serverMode' type='submit' value='join' class='btn btn-success'>Rejoindre</button>
+                            </form>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+HTML
+        );
     }
+} else {
+    $webpage->appendContent(<<<HTML
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+HTML
+    );
 }
 
 echo($webpage->toHTML());

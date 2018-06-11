@@ -34,4 +34,6 @@ else {
     header('Location: connexion.php?a=1'.SID);
 }
 
+$webpage->appendContent("</div>");
+
 echo($webpage->toHTML());
