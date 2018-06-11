@@ -50,57 +50,50 @@ $servers = Servers::getServers();
 
 $webpage->appendContent(<<<HTML
     <div class="container" style="margin-top: 20px">
-            <h1 class="text-primary">CRÉER / REJOINDRE UN SALON</h1>
-            <hr class="alert-success">
-            
-            <form class="form-inline my-2 my-lg-10" action="create.php" method="post">
-               <input type="radio" name="serverMode" id="create" value="create" required>
-               <label for="create">Créer un salon</label>
-               <input type="radio" name="serverMode" id="join" value="join" required>
-               <label for="create">Rejoindre un salon</label>
-               <input type="text" name="serverName" required>  
-               <button type="submit" class="btn">Valider</button>                
-            </form>
-            
-            <!--<div id="accordion">-->
-            <!---->
-              <!--<div class="card">-->
-                <!--<div class="card-header" id="headingOne">-->
-                  <!--<h5 class="mb-0">-->
-                    <!--<button name="serverMode" value="create" id="createBtn" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">-->
-                      <!--Créer un salon-->
-                    <!--</button>-->
-                  <!--</h5>-->
-                <!--</div>-->
-                <!--<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">-->
-                  <!--<div class="card-body">-->
-                      <!--<form class="form-inline my-2 my-lg-10" action="create.php" method="post">-->
-                            <!--<label for="create" class="col-sm-2 col-form-label">Nom du salon</label>-->
-                            <!--<input class="form-control" type="text" name="serverName" id="create" required/> -->
-                            <!--<button type="submit" class="btn btn-success">Créer</button>-->
-                      <!--</form>-->
-                  <!--</div>-->
-                <!--</div>-->
-                <!---->
-                <!---->
-              <!--<div class="card">-->
-                <!--<div class="card-header" id="headingTwo">-->
-                  <!--<h5 class="mb-0">-->
-                    <!--<button name="serverMode" value="join" id="joinBtn" class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
-                      <!--Rejoindre un salon-->
-                    <!--</button>-->
-                  <!--</h5>-->
-                <!--</div>-->
-                <!--<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">-->
-                  <!--<div class="card-body">-->
-                      <!--<form class="form-inline my-2 my-lg-10">-->
-                            <!--<label for="join" class="col-sm-2 col-form-label">Nom du salon</label>-->
-                            <!--<input class="form-control" type="text" id="join" name="serverName" required/> -->
-                            <!--<button type="submit" class="btn btn-success">Rejoindre</button>-->
-                      <!--</form>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</div>-->
+        <h1 class="text-primary">CRÉER / REJOINDRE UN SALON</h1>
+        <hr class="alert-success">
+        
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button id="createBtn" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Créer un salon
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <form class="form-inline my-2 my-lg-10" action="create.php" method="post">
+                            <input name="serverMode" value="create" type="hidden"/>
+                            <label for="create" class="col-sm-2 col-form-label">Nom du salon</label>
+                            <input class="form-control" type="text" name="serverName" id="create" required/>
+                            <button type="submit" class="btn btn-success">Créer</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="mb-0">
+                            <button id="joinBtn" class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Rejoindre un salon
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            <form class="form-inline my-2 my-lg-10" action="create.php" method="post">
+                                <input name="serverMode" value="join" type="hidden"/>
+                                <label for="join" class="col-sm-2 col-form-label">Nom du salon</label>
+                                <input class="form-control" type="text" id="join" name="serverName" required/> 
+                                <button type="submit" class="btn btn-success">Rejoindre</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 HTML
 );
