@@ -130,6 +130,15 @@ class Servers {
             throw new Exception("Aucun serveur trouvé");
     }
 
+    public static function getServerByIdPlayer($idPlayer)
+    {
+        $res = selectRequest(array("idPlayer" => $idPlayer), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers,Players", "idPlayer = :idPlayer AND Servers.idServer = Players.idServer");
+        if (isset($res[0]))
+            return $res[0];
+        else
+            throw new Exception("Aucun serveur trouvé");
+    }
+
     public static function getServerById($id)
     {
         $res = selectRequest(array("id" => $id), array(PDO::FETCH_CLASS => 'Servers'), "*", "Servers", "idServer = :id");

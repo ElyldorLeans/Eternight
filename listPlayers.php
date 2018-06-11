@@ -14,7 +14,7 @@ HTML
 if(Users::isConnected()) {
     try{
         $server = Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
-        $players = Players::createPlayersByServer($server->getIdServer());
+        $players = Players::getPlayersForServer($server->getIdServer());
         $tableHL = "<table><tr><td>Joueurs Hors Ligne</td></tr>";
         $tableIL = "<table><tr><td>Joueurs En Ligne</td></tr>";
         foreach ($players as $p) {

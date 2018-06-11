@@ -62,12 +62,17 @@ class Players {
         }
     }
 
-    public static function createPlayersByServer ($idServer) {
+    /**
+     * Returns the name of the given player.
+     * @param int $idServer
+     * @return Players[]
+     */
+    static public function getPlayersForServer ($idServer) {
         $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer", "ORDER BY numPlayer");
         if (isset($res)) {
             return $res;
         } else {
-            throw new Exception("Serveur inexistant");
+            throw new Exception("Aucun joueur pour le serveur donné.");
         }
     }
 
@@ -92,6 +97,23 @@ class Players {
 
         if (isset($res)) {
             return $res;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the werewolf target for the player with the given id.
+     * @param int $idPlayer
+     * @param int $idServer
+     * @return Players
+     */
+    static public function getWerewolfTargetForPlayer ($idPlayer, $idServer) {
+        $res = selectRequest(array("idPlayer" => $idPlayer, "idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "P.idServer, P.idPlayer, P.role, P.phase, P.numPlayer, P.roadSheet, P.isDead",
+            "WerewolfTargets W, Players P", "V.idTargeter = :idPlayer AND W.idServer = :idServer AND P.idPlayer = W.idTargeted");
+
+        if (isset($res[0])) {
+            return $res[0];
         } else {
             return null;
         }
@@ -145,20 +167,6 @@ class Players {
             return null;
         }
         return $maxKey;
-    }
-
-    /**
-     * Returns the name of the given player.
-     * @param int $idServer
-     * @return Players[]
-     */
-    static public function getPlayersForServer ($idServer) {
-        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer");
-        if (isset($res)) {
-            return $res;
-        } else {
-            throw new Exception("Aucun joueur pour le serveur donné.");
-        }
     }
 
     /**
@@ -286,6 +294,27 @@ class Players {
     }
 
     /**
+     * @param int $serverId
+     * @return string
+     */
+    public function getActionsSynopsis ($serverId) {
+        $res = "";
+        $players = self::getPlayersForServer($serverId);
+        foreach ($players as $player) {
+            $res .= $player->numPlayer . " - " . $player->role . "<br/>";
+            $targets = self::getTargetsForPlayer($player->idPlayer, $player->idServer);
+            foreach ($targets as $target) {
+                $res .= "&nbsp;&nbsp;&nbsp;&nbsp;Vise" . $target->numPlayer . " - " . $target->role . "<br/>";
+            }
+            $werewolfTarget = self::getWerewolfTargetForPlayer($player->idPlayer, $serverId);
+            if ($werewolfTarget != null) {
+                $res .= "&nbsp;&nbsp;&nbsp;&nbsp;Vote loup" . $werewolfTarget->numPlayer . " - " . $werewolfTarget->role . "<br/>";
+            }
+            $res .= "<br/>";
+        }
+    }
+
+    /**
      * Resolves the actions of all the players of the given server.
      * @param int $serverId
      */
@@ -306,6 +335,7 @@ class Players {
                 }
             }
         }
+        self::emptyTargets($serverId);
     }
 
     /**
@@ -603,6 +633,34 @@ class Players {
         } else {
             return true;
         }
+    }
+
+    public static function isRepartPhaseEnded($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 1", "ORDER BY numPlayer");
+        if (isset($a) && !empty($a)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static function getMinimumPhase($idServer){
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "min(phase)", "Players", "idServer = :idServer");
+        if(isset($res) && !empty($res)){
+            return $res[0];
+        }
+        else {
+            return -1;
+        }
+    }
+
+    /**
+     * Empties the VillageTargets and WerewolfTargets table for the players in the given server.
+     * @param int $idServer
+     */
+    public static function emptyTargets ($idServer) {
+        deleteRequest(array("idServer" => $idServer), "VillageTargets", "idServer = :idServer");
+        deleteRequest(array("idServer" => $idServer), "WerewolfTargets", "idServer = :idServer");
     }
 
 }
