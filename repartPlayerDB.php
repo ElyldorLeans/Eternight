@@ -9,7 +9,7 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
         $un = Servers::getServerById($server);
         if($un->getUnjoinable() == 0) {
             $un->unjoinable();
-            $players = Players::createPlayersByServer($server);
+            $players = Players::getPlayersForServer($server);
             $numPlayers = sizeof($players);
             $role;
             switch ($numPlayers) {
@@ -40,22 +40,23 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
                     $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien"); // 10PJ
                     break;
                 case 11 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien"); // 11PJ
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
                     break;
                 case 12 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien"); // 12PJ
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
                     break;
                 case 13 :
-                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien"); // 13PJ
+                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien");
                     break;
                 case 14 :
-                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien"); // 14PJ
+                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
                     break;
                 case 15 :
-                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien"); // 15PJ
+                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
                     break;
 
                 default :
+                    $role = array("En attente");
                     break;
             }
             shuffle($role);
@@ -63,7 +64,7 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
                 updateRequest(array("idServer" => $server, "idUser" => $players[$i]->getIdPlayer(), "role" => $role[$i]), "Players", "role = :role,phase = 1", "idPlayer = :idUser AND idServer = :idServer");
             }
         }
-        $players = Players::createPlayersByServer($server);
+        $players = Players::getPlayersForServer($server);
         $html = "<ul>";
         foreach ($players as $p) {
             $html = $html . "<li><a href='detailPlayer.php?id=" . $p->getIdPlayer() . "' target='_blank'>" . $p->getNumPlayer() . " - " . $p->getRole() . "</a><input type='checkbox' disabled></li>";
@@ -72,7 +73,7 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
         echo($html);
     }
     else {
-        $players = Players::createPlayersByServer($server);
+        $players = Players::getPlayersForServer($server);
         //Si on est en phase de pouvoir
         if(isset($_REQUEST['p']) && !empty($_REQUEST['p'])){
             //on regarde si tous les joueurs ont voté

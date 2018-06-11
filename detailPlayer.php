@@ -22,31 +22,44 @@ else {
 if(verify($_GET,"id")){
     $userDisplay = Users::getUserById($_GET["id"]);
     $playerDisplay = Players::getPlayerById($_GET["id"]);
-    $webpage->appendContent("<h1>".$playerDisplay->getNumPlayer()." - ".$userDisplay->getLogin()."</h1>");
-    $webpage->appendContent("<h2 id='roleDisplay'> Rôle : ".$playerDisplay->getRole()."</h2>");
-    $webpage->appendContent("<div id='role'><button onclick='listRole()'> Changer le rôle </button></div>");
-    $webpage->appendContent("<input id='rs' class='form-control' type='text' value='{$playerDisplay->getRoadSheet()}'>Feuille de route</input>");
-    $webpage->appendContent("<button onclick='updateRoadSheet()'> Mettre à jour</button>");
-    $webpage->appendContent("<button onclick='deletePlayer()'> Supprimer le joueur</button>");
+    $webpage->appendContent(<<<HTML
+    <div class="container" style="margin-top: 20px">
+        <h1 class="text-primary">{$playerDisplay->getNumPlayer()} - {$userDisplay->getLogin()}</h1>
+        <hr class="alert-success">
+        
+        <h2 id='roleDisplay'>Rôle : {$playerDisplay->getRole()}</h2>
+        <div id='role'  style="margin-top: 20px">
+            <button class="btn btn-success" onclick='listRole()'> Changer le rôle </button>
+        </div>
+        <button class="btn btn-warning" onclick='deletePlayer()' style="margin-top: 5px"> Supprimer le joueur</button>
+        <hr class="alert-success">
+        <div class="form-group">
+            <h2>Feuille de route</h2>
+            <textarea class="col-sm-8 form-control" id="rs" type='text' rows="7" style="margin-top: 20px" value='{$playerDisplay->getRoadSheet()}'>{$playerDisplay->getRoadSheet()}</textarea>
+            <button class="btn btn-success" onclick='updateRoadSheet()' style="margin-top: 5px"> Mettre à jour</button>
+        </div>
+    </div>
+HTML
+    );
 }
 
 $webpage->appendToHead(<<<HTML
 <script>
 function listRole(){
     var role = document.getElementById("role");
-    role.innerHTML = "<select id='rolechange' size='1'>" +
+    role.innerHTML = "<select class='custom-select col-sm-3' id='rolechange' size='1'>" +
      "<option value='Loup Garou'>Loup Garou</option>" +
      "<option value='Voyante'>Voyante</option>" +
      "<option value='Voyante Corrompue'>Voyante Corrompue</option>" +
      "<option value='Sorcière Corrompue'>Sorcière Corrompue</option>" +
      "<option value='Loup Blanc'>Loup Blanc</option>" +
-     "<option value='Statistiscien'>Statistiscien</option>" +
-      "</select><button id='undo' onclick='undo()'>Annuler</button><button id='change' onclick='change()'>Changer</button>";
+     "<option value='Statisticien'>Statisticien</option>" +
+      "</select><button class='btn btn-info' id='undo' onclick='undo()' style='margin-left: 5px'>Annuler</button><button class='btn btn-success' id='change' onclick='change()' style='margin-left: 3px'>Changer</button>";
 }
 
 function undo(){
     var role = document.getElementById("role");
-    role.innerHTML = "<button onclick='listRole()'> Changer le rôle </button>";
+    role.innerHTML = "<button class='btn btn-success' onclick='listRole()'> Changer le rôle </button>";
 }
 
 function change(){
@@ -62,6 +75,7 @@ function change(){
   };
   xhttp.open("POST", "playerDetailDB.php?user=" + {$playerDisplay->getIdPlayer()} + "&role=" + roleValue + "&server=" + {$server->getIdServer()}, true);
   xhttp.send();
+  role.innerHTML = "<button class='btn btn-success' onclick='listRole()' style='margin-left: 3px'> Changer le rôle </button>";
 }
 
 function deletePlayer(){
