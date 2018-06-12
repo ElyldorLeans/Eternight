@@ -1,6 +1,6 @@
 <?php
 require_once('inc/autoload.inc.php');
-require_once ('inc/utility.inc.php');
+require_once('inc/utility.inc.php');
 
 $webpage = new Webpage("Eternight - Jeu");
 $webpage->appendContent(<<<HTML
@@ -10,8 +10,8 @@ $webpage->appendContent(<<<HTML
 HTML
 );
 
-if(Users::isConnected()) {
-    try{
+if (Users::isConnected()) {
+    try {
         $user = $_SESSION['User'];
         $server = Servers::getServerByIdPlayer($_SESSION['User']->getIdUser());
         $player = Players::getPlayerById($_SESSION['User']->getIdUser());
@@ -19,23 +19,23 @@ if(Users::isConnected()) {
         $idUser = $_SESSION['User']->getIdUser();
         $playersHTML = array();
         $select = "<select id='playerSelect' name='playerSelect'>";
-        foreach ($players as $p){
+        $selectMultiple = "<select multiple id='playerSelect' name='playerSelect'>";
+        foreach ($players as $p) {
             $playersHTML[$p->getIdPlayer()] = Players::getNamePlayer($p);
-            if($p->getIdPlayer() != $idUser){
-                $select = $select."<option value ='".$p->getIdPlayer()."'>".Players::getNamePlayer($p)."</option>";
+            if ($p->getIdPlayer() != $idUser) {
+                $select = $select . "<option value ='" . $p->getIdPlayer() . "'>" . Players::getNamePlayer($p) . "</option>";
+                $selectMultiple = $selectMultiple . "<option value ='" . $p->getIdPlayer() . "'>" . Players::getNamePlayer($p) . "</option>";
             }
         }
 
 
-    }
-        //Si la personne ne possède pas de serveur, on la redirige vers l'index
+    } //Si la personne ne possède pas de serveur, on la redirige vers l'index
     catch (Exception $e) {
-        header('Location: index.php'.SID);
+        header('Location: index.php' . SID);
     }
-}
-//On redirige les personnes déco
+} //On redirige les personnes déco
 else {
-    header('Location: connexion.php?a=1'.SID);
+    header('Location: connexion.php?a=1' . SID);
 }
 
 $webpage->appendToHead(<<<HTML
@@ -113,7 +113,8 @@ function quitServer(){
     }
     
     function voteStat(){
-    alert("bite");
+        var div = document.getElementById("divPlayer");
+        div.innerHTML = "{$selectMultiple}</select><button onclick='submitVoteStat()'>Valider</button>";
     }
     
     
@@ -135,7 +136,7 @@ function quitServer(){
     }  
 }
 
-    function submitVoteLych() {
+function submitVoteLych() {
         var idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function(){
@@ -147,6 +148,27 @@ function quitServer(){
         xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idww=" + {$idUser} + "&idt=" + idt, true);
         xhttp.send(); 
     }
+    
+function submitVoteStat() {
+    var selectedValues = [];
+    $("#playerSelect :selected").each(function(){
+        selectedValues.push($(this).val()); 
+    });
+    alert(selectedValues);
+    if (selectedValues.length !== 3) {
+        return;
+    }
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            // alert(this.responseText);
+            myVar = setInterval(checkPowerPhaseEnded, 1000);
+        }
+        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idstat=" + {$idUser} + "&idt1="
+            + selectedValues[0] + "&idt2=" + selectedValues[1] + "&idt3=" + selectedValues[2], true);
+        xhttp.send();
+    }
+}
 
 function getFormByRole(){
     var role = "{$player->getRole()}";
@@ -166,7 +188,7 @@ function getFormByRole(){
             votePsy();
             break;
         case "Loup Garou":
-            voteLych()
+            voteLych();
             break;
         case "Statistiscien":
             voteStat();
@@ -218,7 +240,23 @@ $(document).ready(function () {
         xhttp.open("POST", "phaseDB.php?server=" + {$server->getIdServer()} + "&p=1", true);
         xhttp.send();
         
-    }  
+    }
+    
+    // Have max 3 choices in choice for Statistiscien
+    arr = [];
+    $("select[multiple]").change(function() {
+        $(this).find("option:selected")
+        if ($(this).find("option:selected").length > 3) {
+            $(this).find("option").removeAttr("selected");
+            $(this).val(arr);
+        }
+        else {
+            arr = [];
+            $(this).find("option:selected").each(function(index, item) {
+                arr.push($(item).val());
+            });
+        }
+    });
 });
 </script>
 HTML
@@ -229,8 +267,6 @@ $webpage->appendContent("<h3>{$player->getNumPlayer()} - {$user->getLogin()}</h3
 $webpage->appendContent("<button class='btn btn-warning' onclick='quitServer()'>Quitter le salon</button>");
 $webpage->appendContent("<h2 id='phase'>Phase de répartition</h2>");
 $webpage->appendContent("<div id='divPlayer'></div>");
-
-
 
 
 echo($webpage->toHTML());
