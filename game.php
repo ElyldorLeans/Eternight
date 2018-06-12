@@ -131,7 +131,6 @@ function submitVoteWhiteLych() {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
-                //alert(this.responseText);
                 voteLych();
             }
         };
@@ -148,7 +147,6 @@ function submitVoteCorruptedSorc() {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
-                //alert(this.responseText);
                 voteLych();
             }
         };
@@ -164,7 +162,6 @@ function submitVoteCorruptedPsy() {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
-            //alert(this.responseText);
             voteLych();
         }
     };
@@ -177,7 +174,6 @@ function submitVotePsy() {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
-            //alert(this.responseText);
             myVar = setInterval(checkPowerPhaseEnded,1000);
         }
     };
@@ -190,7 +186,6 @@ function submitVoteLych() {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
-            //alert(this.responseText);
             myVar = setInterval(checkPowerPhaseEnded,1000);
         }
     };
@@ -203,14 +198,12 @@ function submitVoteStat() {
     $("#playerSelect :selected").each(function(){
         selectedValues.push($(this).val()); 
     });
-    // alert(selectedValues);
     if (selectedValues.length !== 3) {
         return;
     }
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
-            // alert(this.responseText);
             myVar = setInterval(checkPowerPhaseEnded, 1000);
         }
         xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idstat=" + {$idUser} + "&idt1="
