@@ -282,7 +282,7 @@ class Players {
     public function getValueInRoleInfos ($key) {
         $values = json_decode($this->roleInfos, true);
         if ($values == null) {
-            return null;
+            return "null";
         }
         return $values[$key];
     }
@@ -649,12 +649,22 @@ class Players {
         }
     }
 
-    public static function isDelibPhaseEnded($idServer){
-        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 4", "ORDER BY numPlayer");
-        if (isset($a) && !empty($a)) {
-            return false;
-        } else {
+
+    public static function isDelibPhaseTime($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 3", "ORDER BY numPlayer");
+        if (isset($a) && empty($a)) {
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isVotePhaseTime($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 4", "ORDER BY numPlayer");
+        if (isset($a) && empty($a)) {
+            return true;
+        } else {
+            return false;
         }
     }
 

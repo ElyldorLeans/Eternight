@@ -17,7 +17,7 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
                 }
                 break;
             case "2":
-                if (Players::isPowerPhaseEnded($server)) {
+                if (Players::isDelibPhaseTime($server)) {
                     echo("POWER_ENDED");
                 }
                 else {
@@ -25,8 +25,16 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
                 }
                 break;
             case "3":
-                if (Players::isDelibPhaseEnded($server)) {
+                if (Players::isVotePhaseTime($server)){
                     echo("DELIB_ENDED");
+                }
+                else {
+                    echo("NOT_READY");
+                }
+                break;
+            case "4":
+                if (Players::isRepartPhaseEnded($server)) {
+                    echo("VOTE_ENDED");
                 }
                 else {
                     echo("NOT_READY");
