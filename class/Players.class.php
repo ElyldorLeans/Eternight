@@ -142,7 +142,26 @@ class Players {
      * @return int|null
      */
     static public function getMainWerewolfTarget ($idServer) {
-        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "idTargeted", "WerewolfTargets", "idServer = :idServer");
+        return self::getMainTarget($idServer, "WerewolfTargets");
+    }
+
+    /**
+     * Returns the werewolf main target for the given server.
+     * @param int $idServer
+     * @return int|null
+     */
+    static public function getMainVillageTarget ($idServer) {
+        return self::getMainTarget($idServer, "VillageTargets");
+    }
+
+    /**
+     * Returns the main target for the given server adn tab.
+     * @param int $idServer
+     * @param string $tabName
+     * @return int|null
+     */
+    static private function getMainTarget ($idServer, $tabName) {
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "idTargeted", $tabName, "idServer = :idServer");
 
         if (!isset($res)) {
             return null;
@@ -312,6 +331,17 @@ class Players {
                 $res .= "&nbsp;&nbsp;&nbsp;&nbsp;Vote loup" . $werewolfTarget->numPlayer . " - " . $werewolfTarget->role . "<br/>";
             }
             $res .= "<br/>";
+        }
+    }
+
+    /**
+     * Resolves the actions of all the players of the given server.
+     * @param int $serverId
+     */
+    static public function resolveVote ($serverId) {
+        $targetId = self::getMainVillageTarget($serverId);
+        if ($targetId != null) {
+            self::kill($targetId, $serverId);
         }
     }
 
