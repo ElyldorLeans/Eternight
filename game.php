@@ -6,7 +6,7 @@ $webpage = new Webpage("Eternight - Jeu");
 $webpage->appendContent(<<<HTML
     <div class="container" style="margin-top: 20px">
         <h1 class="text-primary"></h1>
-        <hr class="//alert-success">
+        <hr class="alert-success">
 HTML
 );
 
@@ -43,7 +43,7 @@ $webpage->appendToHead(<<<HTML
 var myVar;
 
 function quitServer(){
-  const xhttp = new XMLHttpRequest();
+  var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200) {
      window.location.href = "index.php";
@@ -54,14 +54,14 @@ function quitServer(){
 }
 
     function checkPowerPhaseEnded(){
-        const xhttp = new XMLHttpRequest();
+        var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
                 div = document.getElementById("divPlayer");
                 if(this.responseText == "POWER_ENDED"){
                     clearInterval(myVar);
                     document.getElementById("phase").innerHTML = "Phase de délibération";
-                    myVar = setInterval(checkDelibPhaseEnded,1000);
+                    myVar = setInterval(checkDelibPhaseEnded(),1000);
                 }
                 else {
                     div.innerHTML = "En attente de la fin de la phase de pouvoirs";
@@ -73,48 +73,26 @@ function quitServer(){
     }
     
         function checkDelibPhaseEnded(){
-        const xhttp = new XMLHttpRequest();
+        var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
                 div = document.getElementById("divPlayer");
-                ////alert(this.responseText);
                 if(this.responseText == "DELIB_ENDED"){
                     clearInterval(myVar);
                     document.getElementById("phase").innerHTML = "Phase de vote";
-                    voteVillage();
                 }
                 else {
-                    div.innerHTML = "En attente de la fin de la phase de délibération";
+                    div.innerHTML = "En attente de la fin de la phase";
                 }
             }
         };
         xhttp.open("POST", "phaseDB.php?server=" + {$server->getIdServer()} + "&p=3", true);
         xhttp.send();
     }
-    
-    function checkVotePhaseEnded(){
-        const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function(){
-            if (this.readyState == 4 && this.status == 200) {
-                div = document.getElementById("divPlayer");
-                ////alert(this.responseText);
-                if(this.responseText == "VOTE_ENDED"){
-                    clearInterval(myVar);
-                    document.getElementById("phase").innerHTML = "Phase de Pouvoirs";
-                    getFormByRole();
-                }
-                else {
-                    div.innerHTML = "En attente de la fin de la phase de vote";
-                }
-            }
-        };
-        xhttp.open("POST", "phaseDB.php?server=" + {$server->getIdServer()} + "&p=4", true);
-        xhttp.send();
-    }
 
     function voteWhiteLych() {
-        const div = document.getElementById("divPlayer");
-        div.innerHTML = "Cible du pouvoir<br>{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteWhiteLych()'>Valider</button>";
+        var div = document.getElementById("divPlayer");
+        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteWhiteLych()'>Valider</button>";
     }
     
     function voteCorruptedPsy(){
@@ -132,8 +110,8 @@ function quitServer(){
     }
     
     function voteLych() {
-      const div = document.getElementById("divPlayer");
-        div.innerHTML = "Vote pour la cible du loup garou<br>{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteLych()'>Valider</button>";
+        const div = document.getElementById("divPlayer");
+        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteLych()'>Valider</button>";
     }
     
     function votePsy(){
@@ -144,11 +122,6 @@ function quitServer(){
     function voteStat(){
         const div = document.getElementById("divPlayer");
         div.innerHTML = "{$selectMultiple}</select><button onclick='submitVoteStat()'>Valider</button>";
-    }
-    
-    function voteVillage(){
-        const div = document.getElementById("divPlayer");
-        div.innerHTML = "Vote du village<br>{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteVillage()'>Valider</button>";
     }
     
     
@@ -230,33 +203,20 @@ function submitVoteStat() {
     $("#playerSelect :selected").each(function(){
         selectedValues.push($(this).val()); 
     });
-    //alert(selectedValues);
+    // alert(selectedValues);
     if (selectedValues.length !== 3) {
         return;
     }
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
-            //alert(this.responseText);
+            // alert(this.responseText);
             myVar = setInterval(checkPowerPhaseEnded, 1000);
         }
         xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idstat=" + {$idUser} + "&idt1="
             + selectedValues[0] + "&idt2=" + selectedValues[1] + "&idt3=" + selectedValues[2], true);
         xhttp.send();
     }
-}
-
-function submitVoteVillage(){
-    const idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
-    const xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function(){
-            if (this.readyState == 4 && this.status == 200) {
-                //alert(this.responseText);
-                myVar = setInterval(checkVotePhaseEnded,1000);
-            }
-        };
-        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idvil=" + {$idUser} + "&idt=" + idt, true);
-        xhttp.send(); 
 }
 
 function getFormByRole(){
@@ -293,29 +253,20 @@ $(document).ready(function () {
             myVar = setInterval(checkReady,1000);
             break;
         case "1":
-            clearInterval(myVar);
-            document.getElementById("phase").innerHTML = "Phase de Pouvoirs";
             getFormByRole();
             break;
         case "2":
             clearInterval(myVar);
-            document.getElementById("phase").innerHTML = "Phase de Pouvoirs";
             myVar = setInterval(checkPowerPhaseEnded,1000);
             break;
         case "3":
-            clearInterval(myVar);
-            document.getElementById("phase").innerHTML = "Phase de Délibérations";
-            myVar = setInterval(checkDelibPhaseEnded,1000);
+            myVar = setInterval(checkReady,1000);
             break;
         case "4":
-            clearInterval(myVar);
-            document.getElementById("phase").innerHTML = "Phase de vote";
-            voteVillage();
+            myVar = setInterval(checkReady,1000);
             break;
         case "5":
-            clearInterval(myVar);
-            document.getElementById("phase").innerHTML = "Phase de vote";
-            myVar = setInterval(checkVotePhaseEnded,1000);
+            myVar = setInterval(checkReady,1000);
             break;
         default :
             break;
