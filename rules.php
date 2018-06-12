@@ -13,33 +13,33 @@ $webpage->appendContent(<<<HTML
             
             <h2 class="text-primary">RÔLES</h2>
             
+            <br/>
+            <h4 class="text-info">Villageois</h4>
             
-            <h4 class="text-primary">Villageois</h4>
-            
-            <h5 class="text-primary">La Voyante</h5>
+            <h5>La Voyante</h5>
             <p>Chaque nuit, la voyante demande l'identité de quelqu'un.</p>
             <p>Sur sa feuille de route, elle récupère le rôle de la personne qu'elle a visée.</p>
             
-            <h5 class="text-primary">Le Statistiscien</h5>
+            <h5>Le Statistiscien</h5>
             <p>Chaque nuit, le statistiscien choisit trois personnes.</p>
             <p>Sur sa feuille de route, il va savoir s'il y avait un lycanthrope dans les trois personnes visées. Il va également connaître le nombre de personnes mortes et le nombre de lycanthropes vivants.</p>
             
+            <br/>
+            <h4 class="text-warning">Lycanthropes</h4>
             
-            <h4 class="text-primary">Lycanthropes</h4>
-            
-            <h5 class="text-primary">Le Loup Garou</h5>
+            <h5>Le Loup Garou</h5>
             <p>Chaque nuit, le loup garou va voter pour qui il veut dévorer.</p>
             <p>Sur sa feuille de route, il va savoir qui a été voté en majorité stricte par les lycanthropes et si cette personne est bien morte ou pas. Il va également connaître les personnes ciblées par les sorcières corrompues pour de la résurrection.</p>
             
-            <h5 class="text-primary">La Voyante Corrompue</h5>
+            <h5>La Voyante Corrompue</h5>
             <p>Chaque nuit, la voyante corrompue va demander l'identité de quelqu'un. Elle va également voter pour qui elle veut que les loups garous dévorent.</p>
             <p>Sur sa feuille de route, elle récupère trois rôles dont celui de la personne qu'elle a visée.</p>
             
-            <h5 class="text-primary">La Sorcière Corrompue</h5>
+            <h5>La Sorcière Corrompue</h5>
             <p>Une fois dans la partie, la sorcière corrompue peut choisir de ressusciter un mort. Si la personne visée n'est pas morte, son pouvoir n'est pas dépensé et elle peut réessayer dès la nuit suivante. Elle va également voter pour qui elle veut que les loups garous dévorent.</p>
             <p>Sur sa feuille de route, elle saura si son pouvoir a été utile.</p>
             
-            <h5 class="text-primary">Le Loup Blanc</h5>
+            <h5>Le Loup Blanc</h5>
             <p>Le Loup Blanc ne gagne que s'il termine seul. Son but est donc de garder un certain équilibre entre le nombre de villageois et le nombre de lycanthropes, pour éviter qu'un des groupes ne gagne avant lui !</p>
             <p>Une fois dans la partie, le loup blanc peut choisir de tuer un lycanthrope. Si la personne visée n'est pas lycanthrope, elle ne mourra pas. Il va également voter pour qui il veut que les loups garous dévorent.</p>
             <p>Sur sa feuille de route, il aura le compte de lycanthropes vivants.</p>

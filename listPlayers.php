@@ -25,6 +25,18 @@ if(Users::isConnected()) {
         $webpage->appendContent($tableHL."</table>");
         $webpage->appendContent($tableIL."</table>");
     }
+    catch(InvalidArgumentException $e){
+        // Not an owner
+        $server = Servers::getServerByIdPlayer($_SESSION['User']->getIdUser());
+        $players = Players::getPlayersForServer($server->getIdServer());
+        $idUser = $_SESSION['User']->getIdUser();
+        $table = "<table>";
+        foreach ($players as $p) {
+            $name = Players::getNamePlayer($p);
+            $table = $table."<tr><td>{$name}</td></tr>";
+        }
+        $webpage->appendContent($table."</table>");
+    }
     catch(Exception $e){
         header('Location: index.php'.SID);
     }
