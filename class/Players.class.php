@@ -225,6 +225,7 @@ class Players {
         $this->phase = $phase;
     }
 
+
     /**
      * @return int
      */
@@ -644,6 +645,15 @@ class Players {
         }
     }
 
+    public static function isDelibPhaseEnded($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 4", "ORDER BY numPlayer");
+        if (isset($a) && !empty($a)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public static function getMinimumPhase($idServer){
         $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "min(phase)", "Players", "idServer = :idServer");
         if(isset($res) && !empty($res)){
@@ -651,6 +661,24 @@ class Players {
         }
         else {
             return -1;
+        }
+    }
+
+    public static function alreadyVoteWW($idServer,$idTargeter,$idTargeted){
+        $a = selectRequest(array("idServer" => $idServer, "idTargeter" => $idTargeter,"idTargeted" => $idTargeted), array(PDO::FETCH_ASSOC), "*", "WerewolfTargets", "idServer = :idServer AND idTargeted = :idTargeted AND idTargeter = :idTargeter");
+        if (isset($a) && !empty($a)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function alreadyVoteVil($idServer,$idTargeter,$idTargeted){
+        $a = selectRequest(array("idServer" => $idServer, "idTargeter" => $idTargeter,"idTargeted" => $idTargeted), array(PDO::FETCH_ASSOC), "*", "VillageTargets", "idServer = :idServer AND idTargeted = :idTargeted AND idTargeter = :idTargeter");
+        if (isset($a) && !empty($a)) {
+            return true;
+        } else {
+            return false;
         }
     }
 

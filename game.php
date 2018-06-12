@@ -51,6 +51,43 @@ function quitServer(){
   xhttp.send();
 }
 
+    function checkPowerPhaseEnded(){
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200) {
+                div = document.getElementById("divPlayer");
+                if(this.responseText == "POWER_ENDED"){
+                    clearInterval(myVar);
+                    div.innerHTML = "Phase de délibération";
+                    myVar = setInterval(checkDelibPhaseEnded(),1000);
+                }
+                else {
+                    div.innerHTML = "En attente de la fin de la phase de pouvoirs";
+                }
+            }
+        };
+        xhttp.open("POST", "phaseDB.php?server=" + {$server->getIdServer()} + "&p=2", true);
+        xhttp.send();
+    }
+    
+        function checkDelibPhaseEnded(){
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200) {
+                div = document.getElementById("divPlayer");
+                if(this.responseText == "DELIB_ENDED"){
+                    clearInterval(myVar);
+                    div.innerHTML = "Phase de vote";
+                }
+                else {
+                    div.innerHTML = "En attente de la fin de la phase";
+                }
+            }
+        };
+        xhttp.open("POST", "phaseDB.php?server=" + {$server->getIdServer()} + "&p=3", true);
+        xhttp.send();
+    }
+
     function voteWhiteLych() {
         var div = document.getElementById("divPlayer");
         div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteWhiteLych()'>Valider</button>";
@@ -84,7 +121,7 @@ function quitServer(){
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
-                alert(this.responseText);
+                //alert(this.responseText);
                 voteLych();
             }
         };
@@ -98,21 +135,16 @@ function quitServer(){
 
     function submitVoteLych() {
         var idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
-        if(idt != -1){
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
-                alert(this.responseText);
-                voteLych();
+                //alert(this.responseText);
+                myVar = setInterval(checkPowerPhaseEnded,1000);
             }
         };
-        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idwl=" + {$idUser} + "&idt=" + idt, true);
-        xhttp.send();
+        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idww=" + {$idUser} + "&idt=" + idt, true);
+        xhttp.send(); 
     }
-    else {
-            voteLych();
-    }  
-}
 
 function getFormByRole(){
     var role = "{$player->getRole()}";
@@ -151,39 +183,38 @@ $(document).ready(function () {
         case "1":
             getFormByRole();
             break;
-        case 2:
+        case "2":
+            clearInterval(myVar);
+            myVar = setInterval(checkPowerPhaseEnded,1000);
+            break;
+        case "3":
             myVar = setInterval(checkReady,1000);
             break;
-        case 3:
+        case "4":
             myVar = setInterval(checkReady,1000);
             break;
-        case 4:
-            myVar = setInterval(checkReady,1000);
-            break;
-        case 5:
+        case "5":
             myVar = setInterval(checkReady,1000);
             break;
         default :
             break;
     }
     
-     myVar = setInterval(checkReady, 1000);
-    
     function checkReady(){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
                 div = document.getElementById("divPlayer");
-                if(this.responseText == "NOT_READY"){
-                    div.innerHTML = "En attente de la répartition";
-                }
-                else {
+                if(this.responseText == "REPART_ENDED"){
                     clearInterval(myVar);
                     getFormByRole();
                 }
+                else {
+                    div.innerHTML = "En attente de la répartition";
+                }
             }
         };
-        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()}, true);
+        xhttp.open("POST", "phaseDB.php?server=" + {$server->getIdServer()} + "&p=1", true);
         xhttp.send();
         
     }  
