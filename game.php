@@ -40,6 +40,8 @@ else {
 
 $webpage->appendToHead(<<<HTML
 <script>
+var myVar;
+
 function quitServer(){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function(){
@@ -58,7 +60,7 @@ function quitServer(){
                 div = document.getElementById("divPlayer");
                 if(this.responseText == "POWER_ENDED"){
                     clearInterval(myVar);
-                    div.innerHTML = "Phase de délibération";
+                    document.getElementById("phase").innerHTML = "Phase de délibération";
                     myVar = setInterval(checkDelibPhaseEnded(),1000);
                 }
                 else {
@@ -77,7 +79,7 @@ function quitServer(){
                 div = document.getElementById("divPlayer");
                 if(this.responseText == "DELIB_ENDED"){
                     clearInterval(myVar);
-                    div.innerHTML = "Phase de vote";
+                    document.getElementById("phase").innerHTML = "Phase de vote";
                 }
                 else {
                     div.innerHTML = "En attente de la fin de la phase";
@@ -174,7 +176,6 @@ function getFormByRole(){
 
     
 $(document).ready(function () {
-    var myVar;
     var phase = "{$player->getPhase()}";
     switch(phase){
         case "0":
