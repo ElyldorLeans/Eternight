@@ -120,7 +120,7 @@ function validePower(){
             phase = document.getElementById("phase");
             phase.innerHTML = "Phase des délibérations";
             repart = document.getElementById("repart");
-            repart.innerHTML = "Délibérations en cours ...";
+            repart.innerHTML = "Délibérations en cours ..." + this.responseText;
         }
     };
     xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&d=true", true);

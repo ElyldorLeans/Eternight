@@ -79,6 +79,7 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
             //on regarde si tous les joueurs ont voté
             if(Players::isPowerPhaseEnded($server)){
                 echo("PHASEEND");
+                Players::resolveActions($server);
                 updateRequest(array("idServer" => $server), "Players", "phase = 3", "idServer = :idServer");
             }
             else {
@@ -97,6 +98,7 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
             //On regarde si on est en phase de délibération
             if(isset($_REQUEST['d']) && !empty($_REQUEST['d'])){
                 updateRequest(array("idServer" => $server), "Players", "phase = 4", "idServer = :idServer");
+                echo(Players::getActionsSynopsis($server));
             }
             else{
                 //On regarde si on est en phase de vote
@@ -104,6 +106,7 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
                     //Si tous les joueurs ont voté
                     if(Players::isVotePhaseEnded($server)){
                         echo("PHASEEND");
+                        Players::resolveVote($server);
                         updateRequest(array("idServer" => $server), "Players", "phase = 1", "idServer = :idServer");
                     }
                     else {

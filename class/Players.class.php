@@ -298,7 +298,7 @@ class Players {
      * @param int $serverId
      * @return string
      */
-    public function getActionsSynopsis ($serverId) {
+    public static function getActionsSynopsis ($serverId) {
         $res = "";
         $players = self::getPlayersForServer($serverId);
         foreach ($players as $player) {
