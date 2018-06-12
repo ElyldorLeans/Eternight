@@ -25,7 +25,6 @@ else {
 
 $text = nl2br($player->getRoadSheet());
 $webpage->appendContent(<<<HTML
-    <div class="container" style="margin-top: 20px">
         <h2>Feuille de route</h2>
         <!-- FIXME les sauts à la ligne ne sont pas sauvegardés aaaahhhhhh -->
         <textarea class="col-sm-8 form-control" id="rs" type='text' rows="7" style="margin-top: 20px; white-space: pre-line;" value='{$text}'>{$player->getRoadSheet()}</textarea>

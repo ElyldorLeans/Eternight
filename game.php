@@ -355,10 +355,17 @@ $(document).ready(function () {
 </script>
 HTML
 );
-$webpage->appendContent("<h2>{$server->getNameServer()}</h2>");
-$webpage->appendContent("<h3>{$player->getNumPlayer()} - {$user->getLogin()}</h3>");
-$webpage->appendContent("<h2>{$player->getRole()}</h2>");
-$webpage->appendContent("<button class='btn btn-warning' onclick='quitServer()'>Quitter le salon</button>");
-$webpage->appendContent("<h2 id='phase'>Phase de répartition</h2>");
-$webpage->appendContent("<div id='divPlayer'></div>");
+
+$webpage->appendContent(<<<HTML
+        <h2>Joueur : {$player->getNumPlayer()} - {$user->getLogin()}</h2>
+        <h2>Salon : {$server->getNameServer()}</h2>
+        <button class="btn btn-warning" onclick='quitServer()'>Quitter le salon</button>
+        <hr class="alert-success">
+        <h2 id='phase'>Phase de répartition</h2>
+        <div id='divPlayer'></div>
+    </div>
+</div>
+HTML
+);
+
 echo($webpage->toHTML());
