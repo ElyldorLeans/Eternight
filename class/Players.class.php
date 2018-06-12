@@ -569,7 +569,7 @@ class Players {
      */
     static public function getNumberLycanthrope ($idServer) {
         $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "COUNT(idPlayer)", "Players", "idServer = :idServer AND isDead = 0"
-            . "AND (role = 'Loup Garou' OR role = 'Loup Blanc' OR role = 'Voyante Corrompue' OR role = 'Sorcière Corrompue')");
+            . " AND (role = 'Loup Garou' OR role = 'Loup Blanc' OR role = 'Voyante Corrompue' OR role = 'Sorcière Corrompue')");
         if (isset($res)) {
             return $res[0][0];
         } else {

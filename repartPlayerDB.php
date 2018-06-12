@@ -14,45 +14,57 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
             $role;
             switch ($numPlayers) {
                 case 4 :
-                    $role = array("Loup Garou", "Voyante", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Garou", "Voyante", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Garou", "Voyante", "Voyante", "Voyante");
                     break;
 
                 case 5 :
-                    $role = array("Loup Garou", "Loup Garou", "Voyante", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Garou", "Loup Garou", "Voyante", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Garou", "Loup Garou", "Voyante", "Voyante", "Voyante");
                     break;
 
                 case 6 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante", "Voyante", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante", "Voyante", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
 
                 case 7 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
 
                 case 8 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
 
                 case 9 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
                 case 10 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien"); // 10PJ
+//                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien"); // 10PJ
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante"); // 10PJ
                     break;
                 case 11 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
                 case 12 :
-                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
                 case 13 :
-                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
                 case 14 :
-                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
                 case 15 :
-                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
+//                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien", "Statistiscien");
+                    $role = array("Loup Blanc", "Loup Garou", "Voyante Corrompue", "Voyante Corrompue", "Sorcière Corrompue", "Sorcière Corrompue", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante", "Voyante");
                     break;
 
                 default :
