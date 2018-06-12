@@ -96,33 +96,40 @@ function quitServer(){
     }
     
     function voteCorruptedPsy(){
-        alert("bite");
+        const div = document.getElementById("divPlayer");
+        div.innerHTML = "{$select}</select><button onclick='submitVoteCorruptedPsy()'>Valider</button>";
     }
     
     function voteCorruptedSorc(){
-       alert("bite"); 
+        if ({$player->getValueInRoleInfos("sorcererPower")}) {
+            voteLych();
+            return;
+        }
+        const div = document.getElementById("divPlayer");
+        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteCorruptedSorc()'>Valider</button>";
     }
     
     function voteLych() {
-      var div = document.getElementById("divPlayer");
+        const div = document.getElementById("divPlayer");
         div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteLych()'>Valider</button>";
     }
     
     function votePsy(){
-        alert("bite");
+        const div = document.getElementById("divPlayer");
+        div.innerHTML = "{$select}</select><button onclick='submitVotePsy()'>Valider</button>";
     }
     
     function voteStat(){
-        var div = document.getElementById("divPlayer");
+        const div = document.getElementById("divPlayer");
         div.innerHTML = "{$selectMultiple}</select><button onclick='submitVoteStat()'>Valider</button>";
     }
     
     
-    function submitVoteWhiteLych() {
-        var idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
-        if(idt != -1){
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function(){
+function submitVoteWhiteLych() {
+    const idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
+    if(idt != -1){
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
                 //alert(this.responseText);
                 voteLych();
@@ -130,31 +137,73 @@ function quitServer(){
         };
         xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idwl=" + {$idUser} + "&idt=" + idt, true);
         xhttp.send();
-    }
-    else {
-            voteLych();
+    } else {
+        voteLych();
     }  
 }
 
-function submitVoteLych() {
-        var idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function(){
+function submitVoteCorruptedSorc() {
+    const idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
+    if(idt != -1){
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
                 //alert(this.responseText);
-                myVar = setInterval(checkPowerPhaseEnded,1000);
+                voteLych();
             }
         };
-        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idww=" + {$idUser} + "&idt=" + idt, true);
-        xhttp.send(); 
-    }
+        xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idcs" + {$idUser} + "&idt=" + idt, true);
+        xhttp.send();
+    } else {
+        voteLych();
+    }  
+}
+    
+function submitVoteCorruptedPsy() {
+    const idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            //alert(this.responseText);
+            voteLych();
+        }
+    };
+    xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idcp=" + {$idUser} + "&idt=" + idt, true);
+    xhttp.send();
+}
+    
+function submitVotePsy() {
+    const idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            //alert(this.responseText);
+            myVar = setInterval(checkPowerPhaseEnded,1000);
+        }
+    };
+    xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idp=" + {$idUser} + "&idt=" + idt, true);
+    xhttp.send();
+}
+
+function submitVoteLych() {
+    const idt = document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            //alert(this.responseText);
+            myVar = setInterval(checkPowerPhaseEnded,1000);
+        }
+    };
+    xhttp.open("POST", "gameDB.php?server=" + {$server->getIdServer()} + "&idww=" + {$idUser} + "&idt=" + idt, true);
+    xhttp.send(); 
+}
     
 function submitVoteStat() {
-    var selectedValues = [];
+    const selectedValues = [];
     $("#playerSelect :selected").each(function(){
         selectedValues.push($(this).val()); 
     });
-    alert(selectedValues);
+    // alert(selectedValues);
     if (selectedValues.length !== 3) {
         return;
     }
@@ -171,9 +220,9 @@ function submitVoteStat() {
 }
 
 function getFormByRole(){
-    var role = "{$player->getRole()}";
+    const role = "{$player->getRole()}";
     document.getElementById("phase").innerHTML = "Phase de Pouvoirs";
-    var div = document.getElementById("divPlayer");
+    const div = document.getElementById("divPlayer");
     switch(role){
         case "Loup Blanc":
             voteWhiteLych();
@@ -198,7 +247,7 @@ function getFormByRole(){
 
     
 $(document).ready(function () {
-    var phase = "{$player->getPhase()}";
+    const phase = "{$player->getPhase()}";
     switch(phase){
         case "0":
             myVar = setInterval(checkReady,1000);
@@ -224,7 +273,7 @@ $(document).ready(function () {
     }
     
     function checkReady(){
-        var xhttp = new XMLHttpRequest();
+        const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
                 div = document.getElementById("divPlayer");
@@ -245,7 +294,7 @@ $(document).ready(function () {
     // Have max 3 choices in choice for Statistiscien
     arr = [];
     $("select[multiple]").change(function() {
-        $(this).find("option:selected")
+        $(this).find("option:selected");
         if ($(this).find("option:selected").length > 3) {
             $(this).find("option").removeAttr("selected");
             $(this).val(arr);
