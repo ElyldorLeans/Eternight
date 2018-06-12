@@ -43,7 +43,7 @@ class Players {
      */
     public static $roles = array("Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Loup Garou", "Statistiscien");
     /**
-     * All the available roles.
+     * The lycanthrope roles.
      * @var string[]
      */
     public static $lycanthropeRoles = array("Loup Garou", "Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue");
@@ -63,7 +63,7 @@ class Players {
     }
 
     /**
-     * Returns the name of the given player.
+     * Returns the players for the given server.
      * @param int $idServer
      * @return Players[]
      */
@@ -420,6 +420,7 @@ class Players {
                 self::kill($targets[0]->idPlayer, $targets[0]->idServer);
             }
         }
+        $infoToWrite .= "\nNombre de lycanthropes : " . self::getNumberLycanthrope($player->idServer);
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
     }
@@ -465,7 +466,7 @@ class Players {
         $infoToWrite .= "\nAu moins un lycanthrope dans les personnes visées ? " . (self::hasLycanthrope($targets[0], $targets[1], $targets[2]) ? "Oui" : "Non");
         $infoToWrite .= "\nNombre de personnes mortes : " . self::getNumberDead($player->idServer);
         $infoToWrite .= "\nNombre de lycanthropes : " . self::getNumberLycanthrope($player->idServer);
-        // TODO résultat du vote du village précédent ? #chiant/20
+        // TODO résultat du vote du village précédent
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
     }
@@ -493,6 +494,9 @@ class Players {
                 if ($target->isDead) {
                     self::resurrect($player->idPlayer, $player->idServer);
                     self::writeInRoleInfos($player, array("sorcererPower" => true));
+                    $infoToWrite .= "\nTon pouvoir a été utile.";
+                } else {
+                    $infoToWrite .= "\nTon pouvoir n'a pas été utile.";
                 }
             }
         }
@@ -534,7 +538,7 @@ class Players {
      * @return int
      */
     static public function getNumberLycanthrope ($idServer) {
-        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "COUNT(idPlayer)", "Players", "idServer = :idServer "
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "COUNT(idPlayer)", "Players", "idServer = :idServer AND isDead = 0"
             . "AND (role = 'Loup Garou' OR role = 'Loup Blanc' OR role = 'Voyante Corrompue' OR role = 'Sorcière Corrompue')");
         if (isset($res)) {
             return $res[0][0];
