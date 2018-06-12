@@ -20,8 +20,8 @@ $webpage->appendContent(<<<HTML
             <p>Chaque nuit, la voyante demande l'identité de quelqu'un.</p>
             <p>Sur sa feuille de route, elle récupère le rôle de la personne qu'elle a visée.</p>
             
-            <h5>Le Statistiscien</h5>
-            <p>Chaque nuit, le statistiscien choisit trois personnes.</p>
+            <h5>Le Statisticien</h5>
+            <p>Chaque nuit, le statisticien choisit trois personnes.</p>
             <p>Sur sa feuille de route, il va savoir s'il y avait un lycanthrope dans les trois personnes visées. Il va également connaître le nombre de personnes mortes et le nombre de lycanthropes vivants.</p>
             
             <br/>
