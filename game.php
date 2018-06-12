@@ -3,12 +3,6 @@ require_once('inc/autoload.inc.php');
 require_once ('inc/utility.inc.php');
 
 $webpage = new Webpage("Eternight - Jeu");
-$webpage->appendContent(<<<HTML
-    <div class="container" style="margin-top: 20px">
-        <h1 class="text-primary"></h1>
-        <hr class="alert-success">
-HTML
-);
 
 if(Users::isConnected()) {
     try{
@@ -191,12 +185,20 @@ $(document).ready(function () {
 </script>
 HTML
 );
-
-$webpage->appendContent("<h2>{$server->getNameServer()}</h2>");
-$webpage->appendContent("<h3>{$player->getNumPlayer()} - {$user->getLogin()}</h3>");
-$webpage->appendContent("<button class='btn btn-warning' onclick='quitServer()'>Quitter le salon</button>");
-$webpage->appendContent("<h2 id='phase'>Phase de répartition</h2>");
-$webpage->appendContent("<div id='divPlayer'></div>");
+$webpage->appendContent(<<<HTML
+    <div class="container" style="margin-top: 20px">
+        <h1 class="text-primary">{$player->getNumPlayer()} - {$user->getLogin()}</h1>
+        <hr class="alert-success">
+        
+        <h2>Salon : {$server->getNameServer()}</h2>
+        <button class="btn btn-warning" onclick='quitServer()'>Quitter le salon</button>
+        <hr class="alert-success">
+        <h2 id='phase'>Phase de répartition</h2>
+        <div id='divPlayer'></div>
+    </div>
+</div>
+HTML
+);
 
 
 
