@@ -32,7 +32,7 @@ class Webpage {
         <a>
         <div class="col-sm-5">
             <h1 class="display-3 text-success float-left">Eternight</h1>
-            <p class="float-left"><b>「エターナイト」</b></p>
+            <!--<p class="float-left"><b>「エターナイト」</b></p>-->
         </div>
         </a>
     </nav>
@@ -103,14 +103,11 @@ HTML
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-            
+
                     <div class="collapse navbar-collapse" id="navbarColor02">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
                                 <a class="nav-link" href="./index.php">Accueil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="./purpose.php">À propos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="./rules.php">Règles</a>

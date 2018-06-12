@@ -4,7 +4,7 @@ require_once('inc/utility.inc.php');
 $webpage = new Webpage("Eternight - Jeu");
 $webpage->appendContent(<<<HTML
     <div class="container" style="margin-top: 20px">
-        <h1 class="text-primary"></h1>
+        <h1 class="text-primary">JEU</h1>
         <hr class="alert-success">
 HTML
 );
