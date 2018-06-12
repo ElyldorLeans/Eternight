@@ -50,6 +50,17 @@ function checkRepart() {
     };
     xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()}, true);
     xhttp.send();
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            if(this.responseText > 3){
+                document.getElementById("validate").removeAttribute("disabled");
+            }  
+        }
+    };
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&number=true", true);
+    xhttp.send();
 }
 
 function checkPower() {
@@ -163,7 +174,7 @@ $webpage->appendContent("<h2>{$server->getNameServer()}</h2>");
 $webpage->appendContent("<button class='btn btn-warning' onclick='deleteServer()'>Fermer le salon</button>");
 $webpage->appendContent("<hr class=\"alert-success\">");
 $webpage->appendContent("<h2 id='phase'>Phase de répartition</h2>");
-$webpage->appendContent("<button class='btn btn-success' id='validate' onclick='valideRepart()'> Valider </button>");
+$webpage->appendContent("<button class='btn btn-success' id='validate' onclick='valideRepart()' disabled> Valider </button>");
 $webpage->appendContent("<div id='repart'></div>");
 
 

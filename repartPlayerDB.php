@@ -122,12 +122,18 @@ if(isset($_REQUEST['server']) && !empty($_REQUEST['server'])){
                     }
                 }
                 else{
-                    $html = "<ul>";
-                    foreach($players as $p){
-                        $html = $html."<li><a href='detailPlayer.php?id=".$p->getIdPlayer()."' target='_blank'>".$p->getNumPlayer()." - ".$p->getRole()."</a></li>";
+                    if(isset($_REQUEST['number']) && !empty($_REQUEST['number'])){
+                        echo(sizeof(Players::getPlayersForServer($server)));
                     }
-                    $html = $html."</ul>";
-                    echo($html);
+                    else{
+                        $html = "<ul>";
+                        foreach($players as $p){
+                            $html = $html."<li><a href='detailPlayer.php?id=".$p->getIdPlayer()."' target='_blank'>".$p->getNumPlayer()." - ".$p->getRole()."</a></li>";
+                        }
+                        $html = $html."</ul>";
+                        echo($html);
+                    }
+
                 }
 
             }

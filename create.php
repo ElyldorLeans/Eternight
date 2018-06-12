@@ -31,7 +31,7 @@ if (isset($_POST['serverName']) && isset($_POST['serverMode'])) {
         $max = selectRequest(array("id" => $server->getIdServer()), array(PDO::FETCH_ASSOC), "MAX(numPlayer) AS M", "Players", "idServer = :id");
         if ($_POST['serverMode'] == "join") {
             Players::addPlayer($server->getIdServer(), $user->getIdUser(), $max[0]["M"] + 1);
-            header('Location: repartition.php' . SID);
+            header('Location: game.php' . SID);
         } else {
             echo("Le serveur existe déjà");
         }
@@ -39,7 +39,7 @@ if (isset($_POST['serverName']) && isset($_POST['serverMode'])) {
         if ($_POST['serverMode'] == "create") {
             // On créé le server, puis on ajoute le propriétaire à sa partie dans la table Players
             Servers::createServer($user->getIdUser(), $_POST['serverName']);
-            header('Location: listPlayers.php' . SID);
+            header('Location: manageServer.php' . SID);
         } else {
             echo($e->getMessage());
         }

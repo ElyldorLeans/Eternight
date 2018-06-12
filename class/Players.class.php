@@ -144,7 +144,7 @@ class Players {
     static public function getMainWerewolfTarget ($idServer) {
         $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "idTargeted", "WerewolfTargets", "idServer = :idServer");
 
-        if (!isset($res)) {
+        if (!isset($res[0]) || empty($res)) {
             return null;
         }
         foreach ($res as &$r) {
@@ -152,7 +152,7 @@ class Players {
         }
         $res = array_count_values($res);
         $maxKey = key($res);
-        $maxValue = $res[0];
+        $maxValue = $res[$maxKey];
         $doubleValue = false;
         foreach ($res as $key => $value) {
             if ($value > $maxValue) {
