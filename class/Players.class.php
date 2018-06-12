@@ -43,7 +43,7 @@ class Players {
      */
     public static $roles = array("Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue", "Voyante", "Loup Garou", "Statistiscien");
     /**
-     * All the available roles.
+     * The lycanthrope roles.
      * @var string[]
      */
     public static $lycanthropeRoles = array("Loup Garou", "Loup Blanc", "Voyante Corrompue", "Sorcière Corrompue");
@@ -63,7 +63,7 @@ class Players {
     }
 
     /**
-     * Returns the name of the given player.
+     * Returns the players for the given server.
      * @param int $idServer
      * @return Players[]
      */
@@ -142,9 +142,28 @@ class Players {
      * @return int|null
      */
     static public function getMainWerewolfTarget ($idServer) {
-        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "idTargeted", "WerewolfTargets", "idServer = :idServer");
+        return self::getMainTarget($idServer, "WerewolfTargets");
+    }
 
-        if (!isset($res)) {
+    /**
+     * Returns the werewolf main target for the given server.
+     * @param int $idServer
+     * @return int|null
+     */
+    static public function getMainVillageTarget ($idServer) {
+        return self::getMainTarget($idServer, "VillageTargets");
+    }
+
+    /**
+     * Returns the main target for the given server adn tab.
+     * @param int $idServer
+     * @param string $tabName
+     * @return int|null
+     */
+    static private function getMainTarget ($idServer, $tabName) {
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "idTargeted", $tabName, "idServer = :idServer");
+
+        if (!isset($res[0]) || empty($res)) {
             return null;
         }
         foreach ($res as &$r) {
@@ -152,7 +171,7 @@ class Players {
         }
         $res = array_count_values($res);
         $maxKey = key($res);
-        $maxValue = $res[0];
+        $maxValue = $res[$maxKey];
         $doubleValue = false;
         foreach ($res as $key => $value) {
             if ($value > $maxValue) {
@@ -225,6 +244,7 @@ class Players {
         $this->phase = $phase;
     }
 
+
     /**
      * @return int
      */
@@ -281,7 +301,7 @@ class Players {
     public function getValueInRoleInfos ($key) {
         $values = json_decode($this->roleInfos, true);
         if ($values == null) {
-            return null;
+            return "null";
         }
         return $values[$key];
     }
@@ -297,7 +317,7 @@ class Players {
      * @param int $serverId
      * @return string
      */
-    public function getActionsSynopsis ($serverId) {
+    public static function getActionsSynopsis ($serverId) {
         $res = "";
         $players = self::getPlayersForServer($serverId);
         foreach ($players as $player) {
@@ -311,6 +331,17 @@ class Players {
                 $res .= "&nbsp;&nbsp;&nbsp;&nbsp;Vote loup" . $werewolfTarget->numPlayer . " - " . $werewolfTarget->role . "<br/>";
             }
             $res .= "<br/>";
+        }
+    }
+
+    /**
+     * Resolves the actions of all the players of the given server.
+     * @param int $serverId
+     */
+    static public function resolveVote ($serverId) {
+        $targetId = self::getMainVillageTarget($serverId);
+        if ($targetId != null) {
+            self::kill($targetId, $serverId);
         }
     }
 
@@ -419,6 +450,7 @@ class Players {
                 self::kill($targets[0]->idPlayer, $targets[0]->idServer);
             }
         }
+        $infoToWrite .= "\nNombre de lycanthropes : " . self::getNumberLycanthrope($player->idServer);
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
     }
@@ -464,7 +496,7 @@ class Players {
         $infoToWrite .= "\nAu moins un lycanthrope dans les personnes visées ? " . (self::hasLycanthrope($targets[0], $targets[1], $targets[2]) ? "Oui" : "Non");
         $infoToWrite .= "\nNombre de personnes mortes : " . self::getNumberDead($player->idServer);
         $infoToWrite .= "\nNombre de lycanthropes : " . self::getNumberLycanthrope($player->idServer);
-        // TODO résultat du vote du village précédent ? #chiant/20
+        // TODO résultat du vote du village précédent
         $infoToWrite .= "\n\n";
         self::writeInRoadSheet($player->idPlayer, $player->idServer, $infoToWrite);
     }
@@ -492,6 +524,9 @@ class Players {
                 if ($target->isDead) {
                     self::resurrect($player->idPlayer, $player->idServer);
                     self::writeInRoleInfos($player, array("sorcererPower" => true));
+                    $infoToWrite .= "\nTon pouvoir a été utile.";
+                } else {
+                    $infoToWrite .= "\nTon pouvoir n'a pas été utile.";
                 }
             }
         }
@@ -533,7 +568,7 @@ class Players {
      * @return int
      */
     static public function getNumberLycanthrope ($idServer) {
-        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "COUNT(idPlayer)", "Players", "idServer = :idServer "
+        $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "COUNT(idPlayer)", "Players", "idServer = :idServer AND isDead = 0"
             . "AND (role = 'Loup Garou' OR role = 'Loup Blanc' OR role = 'Voyante Corrompue' OR role = 'Sorcière Corrompue')");
         if (isset($res)) {
             return $res[0][0];
@@ -644,6 +679,25 @@ class Players {
         }
     }
 
+
+    public static function isDelibPhaseTime($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 3", "ORDER BY numPlayer");
+        if (isset($a) && empty($a)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isVotePhaseTime($idServer){
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 4", "ORDER BY numPlayer");
+        if (isset($a) && empty($a)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static function getMinimumPhase($idServer){
         $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "min(phase)", "Players", "idServer = :idServer");
         if(isset($res) && !empty($res)){
@@ -651,6 +705,24 @@ class Players {
         }
         else {
             return -1;
+        }
+    }
+
+    public static function alreadyVoteWW($idServer,$idTargeter,$idTargeted){
+        $a = selectRequest(array("idServer" => $idServer, "idTargeter" => $idTargeter,"idTargeted" => $idTargeted), array(PDO::FETCH_ASSOC), "*", "WerewolfTargets", "idServer = :idServer AND idTargeted = :idTargeted AND idTargeter = :idTargeter");
+        if (isset($a) && !empty($a)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function alreadyVoteVil($idServer,$idTargeter,$idTargeted){
+        $a = selectRequest(array("idServer" => $idServer, "idTargeter" => $idTargeter,"idTargeted" => $idTargeted), array(PDO::FETCH_ASSOC), "*", "VillageTargets", "idServer = :idServer AND idTargeted = :idTargeted AND idTargeter = :idTargeter");
+        if (isset($a) && !empty($a)) {
+            return true;
+        } else {
+            return false;
         }
     }
 

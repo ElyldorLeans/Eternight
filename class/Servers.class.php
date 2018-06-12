@@ -127,7 +127,7 @@ class Servers {
         if (isset($res[0]))
             return $res[0];
         else
-            throw new Exception("Aucun serveur trouvé");
+            throw new InvalidArgumentException ("Aucun serveur trouvé");
     }
 
     public static function getServerByIdPlayer($idPlayer)
