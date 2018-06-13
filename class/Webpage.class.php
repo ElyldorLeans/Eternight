@@ -196,6 +196,7 @@ HTML
 <html lang="fr">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type='text/javascript' src="js/jQuery.js"></script>
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
         <script type="text/javascript" src="bootstrap/js/bootstrap.js" charset="UTF-8"></script>
