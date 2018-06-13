@@ -16,8 +16,8 @@ if (Users::isConnected()) {
         $players = Players::getPlayersForServer($server->getIdServer());
         $idUser = $_SESSION['User']->getIdUser();
         $playersHTML = array();
-        $select = "<select id='playerSelect' name='playerSelect'>";
-        $selectMultiple = "<select multiple id='playerSelect' name='playerSelect'>";
+        $select = "<label for='playerSelect' class='col-sm-1 col-form-label'>Cible</label><select class='custom-select col-sm-3' id='playerSelect' name='playerSelect'>";
+        $selectMultiple = "<label for='playerSelect' class='col-sm-1 col-form-label'>Cibles</label><select class='custom-select col-sm-3' multiple id='playerSelect' name='playerSelect'>";
         foreach ($players as $p) {
             $playersHTML[$p->getIdPlayer()] = Players::getNamePlayer($p);
             if ($p->getIdPlayer() != $idUser) {
@@ -73,7 +73,7 @@ function getFormByRole(){
             //alert("lol");
             voteLych();
             break;
-        case "Statistiscien":
+        case "Statisticien":
             //alert("lol");
             voteStat();
             break;
@@ -106,7 +106,7 @@ function getFormByRole(){
                 //////alert(this.responseText);
                 if(this.responseText == "DELIB_ENDED"){
                     clearInterval(myVar);
-                    document.getElementById("phase").innerHTML = "Phase de vote";
+                    document.getElementById("phase").innerHTML = "Phase de vote du village";
                     voteVillage();
                 }
                 else {
@@ -139,12 +139,12 @@ function getFormByRole(){
     }
     function voteWhiteLych() {
         var div = document.getElementById("divPlayer");
-        div.innerHTML = "Cible du pouvoir<br>{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteWhiteLych()'>Valider</button>";
+        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button class='btn btn-success' style='margin-left: 5px' onclick='submitVoteWhiteLych()'>Valider</button>";
     }
     
     function voteCorruptedPsy(){
         var div = document.getElementById("divPlayer");
-        div.innerHTML = "{$select}</select><button onclick='submitVoteCorruptedPsy()'>Valider</button>";
+        div.innerHTML = "{$select}</select><button class='btn btn-success' style='margin-left: 5px' onclick='submitVoteCorruptedPsy()'>Valider</button>";
     }
     
     function voteCorruptedSorc(){
@@ -153,27 +153,27 @@ function getFormByRole(){
             return;
         }
         var div = document.getElementById("divPlayer");
-        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteCorruptedSorc()'>Valider</button>";
+        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button class='btn btn-success' style='margin-left: 5px' onclick='submitVoteCorruptedSorc()'>Valider</button>";
     }
     
     function voteLych() {
       var div = document.getElementById("divPlayer");
-        div.innerHTML = "Vote pour la cible du loup garou<br>{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteLych()'>Valider</button>";
+        div.innerHTML = "Vote pour la cible du loup garou<br>{$select}<option value='-1'>Personne</option></select><button class='btn btn-success' style='margin-left: 5px' onclick='submitVoteLych()'>Valider</button>";
     }
     
     function votePsy(){
         var div = document.getElementById("divPlayer");
-        div.innerHTML = "{$select}</select><button onclick='submitVotePsy()'>Valider</button>";
+        div.innerHTML = "{$select}</select><button class='btn btn-success' style='margin-left: 5px' onclick='submitVotePsy()'>Valider</button>";
     }
     
     function voteStat(){
         var div = document.getElementById("divPlayer");
-        div.innerHTML = "{$selectMultiple}</select><button onclick='submitVoteStat()'>Valider</button>";
+        div.innerHTML = "{$selectMultiple}</select><button class='btn btn-success' style='margin-left: 5px' onclick='submitVoteStat()'>Valider</button>";
     }
     
     function voteVillage(){
         var div = document.getElementById("divPlayer");
-        div.innerHTML = "Vote du village<br>{$select}<option value='-1'>Personne</option></select><button onclick='submitVoteVillage()'>Valider</button>";
+        div.innerHTML = "{$select}<option value='-1'>Personne</option></select><button class='btn btn-success' style='margin-left: 5px' onclick='submitVoteVillage()'>Valider</button>";
     }
     
     
@@ -336,7 +336,7 @@ $(document).ready(function () {
         
     }
     
-    // Have max 3 choices in choice for Statistiscien
+    // Have max 3 choices in choice for Statisticien
     arr = [];
     $("select[multiple]").change(function() {
         $(this).find("option:selected");
@@ -357,8 +357,9 @@ HTML
 );
 
 $webpage->appendContent(<<<HTML
-        <h2>Joueur : {$player->getNumPlayer()} - {$user->getLogin()}</h2>
-        <h2>Salon : {$server->getNameServer()}</h2>
+        <p><h2>Joueur : </h2>{$player->getNumPlayer()} - {$user->getLogin()}</p>
+        <h2>Rôle : </h2>{$player->getRole()}
+        <h2>Salon : </h2>{$server->getNameServer()}
         <button class="btn btn-warning" onclick='quitServer()'>Quitter le salon</button>
         <hr class="alert-success">
         <h2 id='phase'>Phase de répartition</h2>
