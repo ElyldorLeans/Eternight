@@ -357,9 +357,9 @@ HTML
 );
 
 $webpage->appendContent(<<<HTML
-        <p><h2>Joueur : </h2>{$player->getNumPlayer()} - {$user->getLogin()}</p>
-        <h2>Rôle : </h2>{$player->getRole()}
-        <h2>Salon : </h2>{$server->getNameServer()}
+        <h2>Joueur : {$player->getNumPlayer()} - {$user->getLogin()}</h2>
+        <h2>Rôle : {$player->getRole()}</h2>
+        <h2>Salon : {$server->getNameServer()}</h2>
         <button class="btn btn-warning" onclick='quitServer()'>Quitter le salon</button>
         <hr class="alert-success">
         <h2 id='phase'>Phase de répartition</h2>
