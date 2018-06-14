@@ -142,7 +142,7 @@ class Users
      * @throws Exception Si la session n'a pas pu être démarrée
      */
     private static function startSession() {
-        if(session_status() == PHP_SESSION_NONE) {
+        if(session_id() === '') {
             if(!headers_sent())
                 session_start();
             else

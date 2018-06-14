@@ -33,7 +33,7 @@ if (isset($_POST['serverName']) && isset($_POST['serverMode'])) {
             Players::addPlayer($server->getIdServer(), $user->getIdUser(), $max[0]["M"] + 1);
             header('Location: game.php' . SID);
         } else {
-            echo("Le serveur existe déjà");
+            $webpage->appendContent("<script>alert('Le serveur existe déjà')</script>");
         }
     } catch (Exception $e) {
         if ($_POST['serverMode'] == "create") {
@@ -41,7 +41,7 @@ if (isset($_POST['serverName']) && isset($_POST['serverMode'])) {
             Servers::createServer($user->getIdUser(), $_POST['serverName']);
             header('Location: manageServer.php' . SID);
         } else {
-            echo($e->getMessage());
+            $webpage->appendContent("<script>alert({$e->getMessage()})</script>");
         }
     }
 }

@@ -26,12 +26,12 @@ class Webpage {
         $this->appendContent(<<<HTML
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="./index.php" title="Eternight">
-            <img style="max-width:150px; margin-top: -7px;"
+            <img style="max-width:6em; margin-top: -7px;"
                  src="./images/eternight.png">
         </a>
         <a>
         <div class="col-sm-5">
-            <h1 class="display-3 text-success float-left">Eternight</h1>
+            <h1 class="display-4 text-success float-left">Eternight</h1>
             <!--<p class="float-left"><b>「エターナイト」</b></p>-->
         </div>
         </a>
@@ -196,7 +196,7 @@ HTML
 <html lang="fr">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
         <script type='text/javascript' src="js/jQuery.js"></script>
         <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
         <script type="text/javascript" src="bootstrap/js/bootstrap.js" charset="UTF-8"></script>

@@ -85,12 +85,16 @@ function getFormByRole(){
             if (this.readyState == 4 && this.status == 200) {
                 div = document.getElementById("divPlayer");
                 if(this.responseText == "POWER_ENDED"){
-                    clearInterval(myVar);
-                    document.getElementById("phase").innerHTML = "Phase de délibération";
+					clearInterval(myVar);
+					document.getElementById("phase").innerHTML = "Phase de Délibérations";
                     myVar = setInterval(checkDelibPhaseEnded,1000);
                 }
                 else {
-                    div.innerHTML = "En attente de la fin de la phase de pouvoirs";
+					if ({$player->getIsDead()}) {
+						div.innerHTML = "Tu es mort et ne peux donc pas faire ton pouvoir.";
+					} else {
+						div.innerHTML = "En attente de la fin de la phase de pouvoirs";
+					}
                 }
             }
         };
@@ -99,18 +103,17 @@ function getFormByRole(){
     }
     
         function checkDelibPhaseEnded(){
-        var xhttp = new XMLHttpRequest();
+        const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
                 div = document.getElementById("divPlayer");
-                //////alert(this.responseText);
                 if(this.responseText == "DELIB_ENDED"){
                     clearInterval(myVar);
                     document.getElementById("phase").innerHTML = "Phase de vote du village";
                     voteVillage();
                 }
                 else {
-                    div.innerHTML = "En attente de la fin de la phase de délibération";
+                    div.innerHTML = "En attente de la fin de la phase de délibérations";
                 }
             }
         };
@@ -123,14 +126,17 @@ function getFormByRole(){
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200) {
                 div = document.getElementById("divPlayer");
-                //////alert(this.responseText);
                 if(this.responseText == "VOTE_ENDED"){
                     clearInterval(myVar);
                     document.getElementById("phase").innerHTML = "Phase de Pouvoirs";
                     getFormByRole();
                 }
                 else {
-                    div.innerHTML = "En attente de la fin de la phase de vote";
+					if ({$player->getIsDead()}) {
+						div.innerHTML = "Tu es mort et ne peux donc pas voter.";
+					} else {
+						div.innerHTML = "En attente de la fin de la phase de vote.";
+					}
                 }
             }
         };
@@ -282,6 +288,8 @@ function submitVoteVillage(){
 }
     
 $(document).ready(function () {
+	
+	
     var phase = "{$player->getPhase()}";
     switch(phase){
         case "0":

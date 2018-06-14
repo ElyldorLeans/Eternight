@@ -28,8 +28,10 @@ SQL
     // On détermine le mode de Fetch
     if(array_key_exists(PDO::FETCH_CLASS, $fetch))
         $stmt->setFetchMode(PDO::FETCH_CLASS, $fetch[PDO::FETCH_CLASS]);
-    else
-        $stmt->setFetchMode(array_keys($fetch)[0]);
+    else {
+		$keys = array_keys($fetch);
+        $stmt->setFetchMode($keys[0]);
+	}
 
     // On ajoute tout les paramètres de la requête
     foreach($params as $key => $value) {
@@ -60,8 +62,10 @@ SQL
     // On détermine le mode de Fetch
     if(array_key_exists(PDO::FETCH_CLASS, $fetch))
         $stmt->setFetchMode(PDO::FETCH_CLASS, $fetch[PDO::FETCH_CLASS]);
-    else
-        $stmt->setFetchMode(array_keys($fetch)[0]);
+    else {
+		$keys = array_keys($fetch);
+        $stmt->setFetchMode($keys[0]);
+	}
 
     $stmt->execute();
 

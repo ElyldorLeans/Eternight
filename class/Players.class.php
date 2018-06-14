@@ -109,7 +109,7 @@ class Players {
      * @return Players
      */
     static public function getWerewolfTargetForPlayer ($idPlayer, $idServer) {
-        $res = selectRequest(array("idPlayer" => $idPlayer, "idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "P.idServer, P.idPlayer, P.role, P.phase, P.numPlayer, P.roadSheet, P.isDead",
+        $res = selectRequest(array("idPlayer" => $idPlayer, "idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "P.idServer AS idServer, P.idPlayer AS idPlayer, P.role AS role, P.phase AS phase, P.numPlayer AS numPlayer, P.roadSheet AS roadSheet, P.isDead AS isDead, P.roleInfos AS roleInfos",
             "WerewolfTargets W, Players P", "V.idTargeter = :idPlayer AND W.idServer = :idServer AND P.idPlayer = W.idTargeted");
 
         if (isset($res[0])) {
@@ -126,8 +126,8 @@ class Players {
      * @return Players[]
      */
     static public function getTargetsForRole ($role, $idServer) {
-        $res = selectRequest(array("role" => $role, "idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "P.idServer, P.idPlayer, P.role, P.phase, P.numPlayer, P.roadSheet, P.isDead",
-            "VillageTargets V, Players P", "V.idTargeter = :idPlayer AND V.idServer = :idServer AND P.role = :role");
+        $res = selectRequest(array("role" => $role, "idServer" => $idServer), array(PDO::FETCH_CLASS => "Players"), "P.idServer AS idServer, P.idPlayer AS idPlayer, P.role AS role, P.phase AS phase, P.numPlayer AS numPlayer, P.roadSheet AS roadSheet, P.isDead AS isDead, P.roleInfos AS roleInfos",
+            "VillageTargets V, Players P", "V.idServer = :idServer AND P.role = :role");
 
         if (isset($res)) {
             return $res;
@@ -170,8 +170,8 @@ class Players {
             $r = $r[0];
         }
         $res = array_count_values($res);
-        $maxKey = key($res);
-        $maxValue = $res[$maxKey];
+        $maxKey;
+        $maxValue = 0;
         $doubleValue = false;
         foreach ($res as $key => $value) {
             if ($value > $maxValue) {
@@ -343,6 +343,7 @@ class Players {
         if ($targetId != null) {
             self::kill($targetId, $serverId);
         }
+        self::emptyTargets($serverId);
     }
 
     /**
@@ -350,11 +351,11 @@ class Players {
      * @param int $serverId
      */
     static public function resolveActions ($serverId) {
-        $players = self::getPlayersForServer($serverId);
         $werewolfTargetId = self::getMainWerewolfTarget($serverId);
         if ($werewolfTargetId != null) {
             self::kill($werewolfTargetId, $serverId);
         }
+        $players = self::getPlayersForServer($serverId);
         $playersByRole = array();
         foreach ($players as $player) {
             $playersByRole[$player->role][] = $player;
@@ -374,6 +375,7 @@ class Players {
      * @param Players player
      */
     static public function action ($player) {
+		$player = self::getPlayerById($player->idPlayer);
         if ($player->isDead) {
             self::writeInRoadSheet($player->idPlayer, $player->idServer, "Tour :\n\nTu es mort. Tu n'as rien pu faire ce tour-ci. Mais qui sait, peut-être te feras-tu ressusciter par une sorcière ?\n\n");
             return;
@@ -662,7 +664,7 @@ class Players {
      * @throws Exception
      */
     public static function isVotePhaseEnded ($idServer) {
-        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 5", "ORDER BY numPlayer");
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 5 AND isDead=false", "ORDER BY numPlayer");
         if (isset($a) && !empty($a)) {
             return false;
         } else {
@@ -671,7 +673,7 @@ class Players {
     }
 
     public static function isRepartPhaseEnded($idServer){
-        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 1", "ORDER BY numPlayer");
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 1 AND isDead=false", "ORDER BY numPlayer");
         if (isset($a) && !empty($a)) {
             return false;
         } else {
@@ -690,7 +692,7 @@ class Players {
     }
 
     public static function isVotePhaseTime($idServer){
-        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 4", "ORDER BY numPlayer");
+        $a = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_CLASS => 'Players'), "*", "Players", "idServer = :idServer AND phase != 4 AND isDead=false", "ORDER BY numPlayer");
         if (isset($a) && empty($a)) {
             return true;
         } else {
@@ -701,7 +703,7 @@ class Players {
     public static function getMinimumPhase($idServer){
         $res = selectRequest(array("idServer" => $idServer), array(PDO::FETCH_ASSOC), "min(phase)", "Players", "idServer = :idServer");
         if(isset($res) && !empty($res)){
-            return $res[0];
+            return $res[0][0];
         }
         else {
             return -1;

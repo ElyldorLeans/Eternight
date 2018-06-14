@@ -14,6 +14,7 @@ HTML
 if(Users::isConnected()) {
     try{
         $server = Servers::getServerByIdOwner($_SESSION['User']->getIdUser());
+		$minphase = Players::getMinimumPhase($server->getIdServer());
     }
         //Si la personne ne possède pas de serveur, on la redirige vers l'index
     catch (Exception $e) {
@@ -39,7 +40,8 @@ function deleteServer(){
   xhttp.send();
 }
 
-var myVar = setInterval(checkRepart, 1000);
+var myVar;
+
 function checkRepart() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(){
@@ -55,7 +57,7 @@ function checkRepart() {
     xhttp.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
             if(this.responseText > 3){
-                document.getElementById("validate").removeAttribute("disabled");
+                document.getElementById("validate").style.visibility="visible";
             }  
         }
     };
@@ -129,22 +131,28 @@ function validePower(){
         if (this.readyState == 4 && this.status == 200) {
             document.getElementById("validate").onclick = function(){endDeliberation();};
             phase = document.getElementById("phase");
-            phase.innerHTML = "Phase des délibérations";
+            phase.innerHTML = "Phase des Délibérations";
             repart = document.getElementById("repart");
             repart.innerHTML = "Délibérations en cours ..." + this.responseText;
         }
     };
-    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&d=true", true);
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&vp=true", true);
     xhttp.send();
 }
 
 function valideVote(){
    clearInterval(myVar);
-   document.getElementById("validate").onclick = function(){validePower();};
-   document.getElementById("validate").style.visibility="hidden";
-   phase = document.getElementById("phase");
-   phase.innerHTML = "Phase de Pouvoirs";
-   myVar = setInterval(checkPower, 1000);
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+			document.getElementById("validate").style.visibility="hidden";
+            document.getElementById("validate").onclick = function(){validePower();};
+            document.getElementById("phase").innerHTML = "Phase de Pouvoirs";		
+			myVar = setInterval(checkPower, 1000);
+        }
+    };
+    xhttp.open("POST", "repartPlayerDB.php?server=" + {$server->getIdServer()} + "&vv=true", true);
+    xhttp.send();
 }
 
 
@@ -163,6 +171,47 @@ function endDeliberation(){
     xhttp.send();
 }
 
+$(document).ready(function () {
+	var phase = "{$minphase}";
+    switch(phase){
+        case "":
+        case "0":
+            clearInterval(myVar);
+            myVar = setInterval(checkRepart, 1000);
+            break;
+        case "1":
+            clearInterval(myVar);
+            document.getElementById("phase").innerHTML = "Phase de Pouvoirs ";
+            myVar = setInterval(checkPower,1000);
+            break;
+        case "2":
+            clearInterval(myVar);
+            document.getElementById("phase").innerHTML = "Phase de Pouvoirs";
+            myVar = setInterval(checkPower,1000);
+            break;
+        case "3":
+			clearInterval(myVar);
+            document.getElementById("validate").onclick = function(){endDeliberation();};
+            document.getElementById("validate").style.visibility="visible";
+            phase = document.getElementById("phase");
+            phase.innerHTML = "Phase des Délibérations";
+            repart = document.getElementById("repart");
+            repart.innerHTML = "Délibérations en cours ...";
+            break;
+        case "4":
+            clearInterval(myVar);
+            document.getElementById("phase").innerHTML = "Phase de Vote";
+            myVar = setInterval(checkVote,1000);
+        case "5":
+            clearInterval(myVar);
+            document.getElementById("phase").innerHTML = "Phase de Vote";
+            myVar = setInterval(checkVote,1000);
+        default :
+			alert(phase);
+            break;
+    }
+});
+
 </script>
 HTML
 );
@@ -174,7 +223,7 @@ $webpage->appendContent("<h2>{$server->getNameServer()}</h2>");
 $webpage->appendContent("<button class='btn btn-warning' onclick='deleteServer()'>Fermer le salon</button>");
 $webpage->appendContent("<hr class=\"alert-success\">");
 $webpage->appendContent("<h2 id='phase'>Phase de répartition</h2>");
-$webpage->appendContent("<button class='btn btn-success' id='validate' onclick='valideRepart()' disabled> Valider </button>");
+$webpage->appendContent("<button class='btn btn-success' id='validate' onclick='valideRepart()' style='visibility:hidden'> Valider </button>");
 $webpage->appendContent("<div id='repart'></div>");
 
 
