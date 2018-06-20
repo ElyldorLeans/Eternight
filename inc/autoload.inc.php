@@ -1,6 +1,6 @@
 <?php
 
-define("projectPath", $_SERVER['DOCUMENT_ROOT'] . "/lecoindujoueur/");
+define("projectPath", $_SERVER['DOCUMENT_ROOT'] . "/Eternight/");
 
 /**
  * importe automatiquement les classes inconnues si elles existent
